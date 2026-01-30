@@ -1,0 +1,234 @@
+{% extends 'artworks/base.html' %}
+{% load static %}
+
+{% block title %}{{ collection.name }} Коллекция | IrenFantasyArt{% endblock %}
+
+{% block meta_description %}
+{{ collection.description|truncatechars:150 }}. Коллекция картин художника. {{ artworks.count }} работ. Купить картины из коллекции {{ collection.name }}.
+{% endblock %}
+
+{% block meta_keywords %}{{ collection.name }}, коллекция картин, картины, художник, купить картину{% endblock %}
+
+{% block og_title %}{{ collection.name }} Коллекция | IrenFantasyArt{% endblock %}
+{% block og_description %}{{ collection.description|truncatechars:150 }}{% endblock %}
+{% block og_image %}{% if collection.image %}{{ collection.image.url }}{% else %}{% static 'images/og-image.jpg' %}{% endif %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/collection.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Шапка коллекции с каруселью -->
+<div class="collection-header">
+    <!-- Карусель изображений -->
+    {% if carousel_images %}
+    <div class="collection-carousel">
+        <div class="carousel-container" id="collectionCarousel">
+            <div class="carousel-track">
+                {% for img in carousel_images %}
+                <div class="carousel-slide {% if forloop.first %}active{% endif %}" 
+                     data-slide="{{ forloop.counter0 }}"
+                     style="background-image: url('{{ img.url }}');">
+                    <div class="carousel-overlay"></div>
+                    {% if img.artwork_url %}
+                    <a href="{{ img.artwork_url }}" class="carousel-image-link" aria-label="Посмотреть картину: {{ img.alt }}"></a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Навигация карусели -->
+            <button class="carousel-nav prev" aria-label="Предыдущее изображение">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="carousel-nav next" aria-label="Следующее изображение">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+            
+            <!-- Индикаторы слайдов -->
+            <div class="carousel-indicators">
+                {% for img in carousel_images %}
+                <button class="indicator {% if forloop.first %}active{% endif %}" 
+                        data-slide="{{ forloop.counter0 }}"
+                        aria-label="Перейти к изображению {{ forloop.counter }}">
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="container header-content">
+        <!-- Хлебные крошки -->
+        <nav aria-label="breadcrumb" class="collection-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'collections' %}">Коллекции</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">{{ collection.name|truncatechars:30 }}</li>
+            </ol>
+        </nav>
+        
+        <!-- Заголовок и описание -->
+        <h1 class="collection-title">{{ collection.name }}</h1>
+        
+        {% if collection.description %}
+            <div class="collection-description">
+                {{ collection.description|linebreaks }}
+            </div>
+        {% endif %}
+        
+        <!-- Статистика -->
+        <div class="collection-stats">
+            <div class="stat-item">
+                <span class="stat-number">{{ artworks.paginator.count }}</span>
+                <span class="stat-label">работ</span>
+            </div>
+            
+            {% if available_count %}
+            <div class="stat-item">
+                <span class="stat-number">{{ available_count }}</span>
+                <span class="stat-label">доступно</span>
+            </div>
+            {% endif %}
+            
+            {% if sold_count %}
+            <div class="stat-item">
+                <span class="stat-number">{{ sold_count }}</span>
+                <span class="stat-label">продано</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Кнопка назад -->
+    <div class="back-button">
+        <a href="{% url 'collections' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i> Все коллекции
+        </a>
+    </div>
+    
+    <!-- Работы в коллекции -->
+    <div class="collection-artworks">
+        <h2 class="section-title">Работы в коллекции</h2>
+        
+        {% if artworks %}
+            <div class="artworks-grid">
+                {% for artwork in artworks %}
+                <a href="{{ artwork.get_absolute_url }}" class="collection-artwork-card">
+                    {% if artwork.images.all %}
+                        <img src="{{ artwork.images.first.image.url }}" 
+                             alt="{{ artwork.title }}" 
+                             class="collection-artwork-image"
+                             loading="lazy">
+                    {% else %}
+                        <div class="collection-artwork-image no-image">
+                            <i class="bi bi-image text-muted"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="collection-artwork-content">
+                        <h3 class="collection-artwork-title">{{ artwork.title }}</h3>
+                        
+                        <div class="collection-artwork-meta">
+                            <span>
+                                <i class="bi bi-rulers me-1"></i>{{ artwork.get_dimensions }}
+                            </span>
+                            <span>
+                                <i class="bi bi-calendar me-1"></i>{{ artwork.created_year }}
+                            </span>
+                        </div>
+                        
+                        <div class="collection-artwork-footer">
+                            <div class="collection-artwork-price">
+                                {{ artwork.get_price_display }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            
+            <!-- Пагинация -->
+            {% if artworks.has_other_pages %}
+            <nav aria-label="Пагинация" class="pagination-container">
+                <ul class="pagination justify-content-center">
+                    {% if artworks.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ artworks.previous_page_number }}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in artworks.paginator.page_range %}
+                        {% if artworks.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > artworks.number|add:'-3' and num < artworks.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if artworks.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ artworks.next_page_number }}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+        {% else %}
+            <!-- Пустая коллекция -->
+            <div class="empty-collection">
+                <div class="empty-icon">
+                    <i class="bi bi-inbox"></i>
+                </div>
+                <h3 class="h4 mb-3">Коллекция пока пуста</h3>
+                <p class="text-muted mb-4">Работы в этой коллекции еще не добавлены.</p>
+                <a href="{% url 'catalog' %}" class="btn btn-primary">
+                    <i class="bi bi-grid me-2"></i> Перейти в каталог
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Навигация по другим коллекциям -->
+    {% if other_collections %}
+    <div class="collections-navigation">
+        <h3 class="section-title">Другие коллекции</h3>
+        <div class="nav-grid">
+            {% for other in other_collections %}
+                {% if other.id != collection.id %}
+                <a href="{% url 'collection_detail' other.slug %}" class="nav-collection">
+                    {% if other.image %}
+                        <img src="{{ other.image.url }}" alt="{{ other.name }}">
+                    {% else %}
+                        <div class="nav-collection-icon">
+                            <i class="bi bi-collection text-muted"></i>
+                        </div>
+                    {% endif %}
+                    <div class="nav-collection-info">
+                        <div class="nav-collection-name">{{ other.name|truncatechars:20 }}</div>
+                        <div class="nav-collection-count">{{ other.artwork_count }} работ</div>
+                    </div>
+                </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/collection.js' %}"></script>
+{% endblock %}

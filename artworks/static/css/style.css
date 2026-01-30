@@ -1,0 +1,279 @@
+/* static/css/style.css */
+:root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #166088;
+    --accent-color: #db3a34;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Шапка */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Карточки картин */
+.artwork-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.artwork-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.artwork-image {
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.artwork-card:hover .artwork-image {
+    transform: scale(1.05);
+}
+
+/* Фильтры */
+.filter-scroll {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.filter-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.filter-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.filter-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+/* Анимации */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.dropdown-menu-scrollable {
+    scrollbar-width: thin;
+    scrollbar-color: var(--bs-primary) var(--bs-light);
+}
+
+.dropdown-menu-scrollable::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-menu-scrollable::-webkit-scrollbar-track {
+    background: var(--bs-light);
+    border-radius: 3px;
+}
+
+.dropdown-menu-scrollable::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
+    border-radius: 3px;
+}
+
+/* Компактная навигация */
+.navbar .nav-link {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.navbar .nav-link:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .navbar-collapse {
+        padding-top: 1rem;
+    }
+    
+    .navbar-nav {
+        gap: 0.5rem;
+    }
+    
+    .dropdown-menu-scrollable {
+        max-height: 300px !important;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .artwork-image {
+        height: 200px;
+    }
+    
+    .filter-form {
+        position: static !important;
+    }
+}
+
+/* artworks/static/css/style.css */
+
+/* Прокручиваемое выпадающее меню с поиском */
+.dropdown-menu-scrollable {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Поле поиска в выпадающем меню */
+.dropdown-menu .input-group {
+    margin-bottom: 10px;
+}
+
+/* Стили для коллекций в меню */
+.collection-item {
+    transition: all 0.2s;
+}
+
+.collection-item:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        padding-top: 1rem;
+    }
+    
+    .navbar-nav {
+        margin-bottom: 1rem;
+    }
+    
+    .dropdown-menu {
+        max-height: 300px;
+    }
+    
+    /* Поиск по всему сайту на мобильных */
+    .navbar form.d-flex .form-control {
+        width: 150px !important;
+    }
+}
+
+.navbar-brand img {
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand img:hover {
+    transform: scale(1.05);
+}
+
+/* Адаптивность логотипа */
+@media (max-width: 768px) {
+    .navbar-brand img {
+        height: 32px !important;
+    }
+}
+
+/* Выпадающее меню коллекций */
+.dropdown-menu-scrollable {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+/* Коллекции в меню */
+.collection-item {
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.collection-item:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    transform: translateX(3px);
+}
+
+/* Поиск */
+.navbar form.d-flex .form-control {
+    border-right: 0;
+}
+
+.navbar form.d-flex .btn {
+    border-left: 0;
+    height: 31px;
+}
+
+/* Телеграм кнопка */
+.navbar .btn-telegram {
+    background: linear-gradient(135deg, #0088cc, #24a1e0);
+    color: white;
+    border: none;
+}
+
+.navbar .btn-telegram:hover {
+    background: linear-gradient(135deg, #0077b5, #1d8bd6);
+    color: white;
+}
+
+/* Стили для страницы поиска */
+.search-form .form-control:focus {
+    border-color: #4a6fa5;
+    box-shadow: 0 0 0 0.25rem rgba(74, 111, 165, 0.25);
+}
+
+.search-form .btn-primary {
+    background: linear-gradient(135deg, #4a6fa5, #166088);
+    border-color: #4a6fa5;
+}
+
+.search-results .artwork-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.search-results .artwork-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Карточки с результатами */
+.list-group-item-action:hover {
+    background-color: rgba(74, 111, 165, 0.05);
+    border-left: 3px solid #4a6fa5;
+    padding-left: 13px !important;
+}
+
+/* Адаптивность для страницы поиска */
+@media (max-width: 768px) {
+    .search-results .card-body {
+        padding: 1rem;
+    }
+    
+    .search-results .artwork-image {
+        height: 150px !important;
+    }
+}
+
+/* Подсветка совпадений в результатах (можно добавить через JavaScript) */
+.highlight {
+    background-color: #fff3cd;
+    padding: 0 2px;
+    border-radius: 2px;
+}

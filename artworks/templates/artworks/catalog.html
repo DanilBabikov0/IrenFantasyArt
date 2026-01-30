@@ -1,0 +1,425 @@
+{% extends 'artworks/base.html' %}
+{% load static %}
+
+{% block title %}{{ seo_title }}{% endblock %}
+
+{% block meta_description %}
+Каталог оригинальных картин художника. Фильтры по категориям, тематикам и размерам. 
+Купить уникальные картины маслом, пастелью, графику для вашего дома.
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Левая колонка: Фильтры -->
+        <div class="col-lg-3 col-md-4 mb-4">
+            <!-- Кнопка для показа фильтров на мобильных -->
+            <button type="button" class="btn btn-outline-primary w-100 d-lg-none mb-3 filter-toggle-btn" 
+                    id="filter-toggle">
+                <i class="bi bi-funnel me-2"></i> Показать фильтры
+                {% if request.GET and filtered_count < total_count %}
+                <span class="badge bg-primary ms-2" id="mobile-filter-count">{{ filtered_count }}</span>
+                {% endif %}
+            </button>
+            
+            <div class="card border-0 shadow-sm filter-card sticky-top">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 d-flex align-items-center">
+                        <i class="bi bi-funnel me-2"></i> Фильтры
+                        {% if request.GET and filtered_count < total_count %}
+                        <span class="badge bg-primary ms-2" id="filter-count-badge">{{ filtered_count }}</span>
+                        {% endif %}
+                    </h5>
+                    
+                    <form method="get" id="filter-form">
+                        <!-- Скрытые поля для сортировки и количества на странице -->
+                        <input type="hidden" name="order" id="order-field" value="{{ current_order }}">
+                        <input type="hidden" name="per_page" id="per-page-field" value="{{ per_page }}">
+                        <input type="hidden" name="page" value="1">
+                        
+                        <!-- Поиск по названию -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Поиск по названию</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="q" 
+                                   value="{{ query }}"
+                                   placeholder="Название картины..."
+                                   aria-label="Поиск по названию">
+                        </div>
+                        
+                        <!-- Статус -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Статус</label>
+                            {% for status_value, status_label in status_choices %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       name="status" 
+                                       value="{{ status_value }}"
+                                       id="status_{{ status_value }}"
+                                       {% if status_value in selected_statuses %}checked{% endif %}>
+                                <label class="form-check-label" for="status_{{ status_value }}">
+                                    {{ status_label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Категории -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-flex justify-content-between">
+                                <span>Категория</span>
+                                <small class="text-muted">{{ all_categories.count }}</small>
+                            </label>
+                            <div class="filter-scroll">
+                                {% for category in all_categories %}
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           name="category" 
+                                           value="{{ category.id }}"
+                                           id="category_{{ category.id }}"
+                                           {% if category.id|stringformat:'i' in selected_categories %}checked{% endif %}>
+                                    <label class="form-check-label" for="category_{{ category.id }}">
+                                        {{ category.name }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Тематики -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-flex justify-content-between">
+                                <span>Тематика</span>
+                                <small class="text-muted">{{ all_themes.count }}</small>
+                            </label>
+                            <div class="filter-scroll">
+                                {% for theme in all_themes %}
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           name="theme" 
+                                           value="{{ theme.id }}"
+                                           id="theme_{{ theme.id }}"
+                                           {% if theme.id|stringformat:'i' in selected_themes %}checked{% endif %}>
+                                    <label class="form-check-label" for="theme_{{ theme.id }}">
+                                        {{ theme.name }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Размер -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Размер</label>
+                            {% for size_value, size_label in filter.form.size.field.choices %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       name="size" 
+                                       value="{{ size_value }}"
+                                       id="size_{{ size_value }}"
+                                       {% if size_value in selected_sizes %}checked{% endif %}>
+                                <label class="form-check-label" for="size_{{ size_value }}">
+                                    {{ size_label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Цена -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Цена, руб</label>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="number" 
+                                           class="form-control" 
+                                           name="price_min" 
+                                           placeholder="От"
+                                           value="{{ request.GET.price_min|default:'' }}"
+                                           min="0">
+                                </div>
+                                <div class="col">
+                                    <input type="number" 
+                                           class="form-control" 
+                                           name="price_max" 
+                                           placeholder="До"
+                                           value="{{ request.GET.price_max|default:'' }}"
+                                           min="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Кнопки -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-funnel me-2"></i> Применить фильтры
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="reset-filters">
+                                <i class="bi bi-x-circle me-2"></i> Сбросить все
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Правая колонка: Картины -->
+        <div class="col-lg-9 col-md-8">
+            <!-- Заголовок и статистика -->
+            <div class="mb-4">
+                <h1 class="h2 fw-bold mb-2">
+                    {% if query %}
+                        Результаты поиска: "{{ query }}"
+                    {% else %}
+                        Каталог картин
+                    {% endif %}
+                    <small class="text-muted fs-6 ms-2">
+                        (всего: {{ filtered_count }})
+                    </small>
+                </h1>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="text-muted mb-0">
+                        {% if artworks %}
+                            Показано <strong>{{ artworks.start_index }}–{{ artworks.end_index }}</strong> 
+                            из <strong>{{ filtered_count }}</strong> работ
+                        {% else %}
+                            Работ не найдено
+                        {% endif %}
+                    </p>
+                    
+                    <!-- Элементы управления -->
+                    <div class="view-controls">
+                        <!-- Вид отображения -->
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-primary active" id="view-grid-btn">
+                                <i class="bi bi-grid-3x3"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary" id="view-list-btn">
+                                <i class="bi bi-list"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Сортировка -->
+                        <select class="form-select form-select-sm sorting-select" id="sort-select">
+                            <option value="-created_at" {% if current_order == '-created_at' %}selected{% endif %}>Сначала новые</option>
+                            <option value="created_at" {% if current_order == 'created_at' %}selected{% endif %}>Сначала старые</option>
+                            <option value="-created_year" {% if current_order == '-created_year' %}selected{% endif %}>Последние годы</option>
+                            <option value="created_year" {% if current_order == 'created_year' %}selected{% endif %}>Ранние годы</option>
+                            <option value="price" {% if current_order == 'price' %}selected{% endif %}>Цена по возрастанию</option>
+                            <option value="-price" {% if current_order == '-price' %}selected{% endif %}>Цена по убыванию</option>
+                            <option value="-views" {% if current_order == '-views' %}selected{% endif %}>Сначала популярные</option>
+                            <option value="title" {% if current_order == 'title' %}selected{% endif %}>По названию (А-Я)</option>
+                            <option value="-title" {% if current_order == '-title' %}selected{% endif %}>По названию (Я-А)</option>
+                        </select>
+                        
+                        <!-- Количество на странице -->
+                        <select class="form-select form-select-sm per-page-select" id="per-page-select">
+                            <option value="12" {% if per_page == 12 %}selected{% endif %}>12 на стр.</option>
+                            <option value="24" {% if per_page == 24 %}selected{% endif %}>24 на стр.</option>
+                            <option value="48" {% if per_page == 48 %}selected{% endif %}>48 на стр.</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Активные фильтры -->
+                {% if request.GET and filtered_count < total_count %}
+                <div class="mb-4">
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <small class="text-muted me-2">Активные фильтры:</small>
+                        {% for key, values in request.GET.lists %}
+                            {% if key != 'page' and key != 'order' and key != 'q' and key != 'per_page' %}
+                                {% for value in values %}
+                                    {% if value %}
+                                    <div class="badge bg-primary d-flex align-items-center">
+                                        {% if key == 'category' %}
+                                            {% for cat in all_categories %}
+                                                {% if cat.id|stringformat:'i' == value %}
+                                                    {{ cat.name }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% elif key == 'theme' %}
+                                            {% for theme in all_themes %}
+                                                {% if theme.id|stringformat:'i' == value %}
+                                                    {{ theme.name }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% elif key == 'size' %}
+                                            {{ value|capfirst }}
+                                        {% elif key == 'price_min' %}
+                                            От {{ value }} ₽
+                                        {% elif key == 'price_max' %}
+                                            До {{ value }} ₽
+                                        {% elif key == 'status' %}
+                                            {% for status_choice in status_choices %}
+                                                {% if status_choice.0 == value %}
+                                                    {{ status_choice.1 }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {{ key }}: {{ value }}
+                                        {% endif %}
+                                        
+                                        <a href="#" class="text-white ms-2 remove-filter" 
+                                           data-key="{{ key }}" 
+                                           data-value="{{ value }}"
+                                           style="text-decoration: none;">
+                                            <i class="bi bi-x"></i>
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <button type="button" class="btn btn-sm btn-outline-danger" id="clear-all-filters">
+                            <i class="bi bi-trash me-1"></i> Очистить все
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Картины -->
+            {% if artworks %}
+                <div id="artworks-grid-view" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                    {% for artwork in artworks %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm artwork-card">
+                            <a href="{{ artwork.get_absolute_url }}" class="text-decoration-none">
+                                <!-- Изображение -->
+                                {% if artwork.images.all %}
+                                    <img src="{{ artwork.images.first.image.url }}" 
+                                         class="card-img-top artwork-image" 
+                                         alt="{{ artwork.title }}"
+                                         loading="lazy">
+                                {% else %}
+                                    <div class="card-img-top artwork-image bg-light d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-image text-muted fs-1"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title text-dark mb-2">{{ artwork.title }}</h5>
+                                    
+                                    <!-- Мета информация -->
+                                    <div class="mb-2">
+                                        {% if artwork.category %}
+                                        <span class="badge bg-light text-dark me-1">
+                                            <i class="bi bi-palette me-1"></i>{{ artwork.category.name }}
+                                        </span>
+                                        {% endif %}
+                                        
+                                        {% if artwork.theme %}
+                                        <span class="badge bg-light text-dark">
+                                            <i class="bi bi-tag me-1"></i>{{ artwork.theme.name }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Описание -->
+                                    <p class="card-text text-muted small mb-3 flex-grow-1">
+                                        {{ artwork.short_description|truncatechars:100 }}
+                                    </p>
+                                    
+                                    <!-- Технические детали -->
+                                    <div class="mb-3">
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <small class="text-muted d-block">
+                                                    <i class="bi bi-rulers me-1"></i>
+                                                    {{ artwork.get_dimensions }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Цена и действия -->
+                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                        <div class="{% if artwork.status == 'sold' %}text-danger{% else %}text-primary{% endif %} fw-bold">
+                                            {{ artwork.get_price_display }}
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="bi bi-eye me-1"></i>{{ artwork.views }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Пагинация -->
+                {% if artworks.has_other_pages %}
+                <nav aria-label="Пагинация" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if artworks.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="?{% for key, value in request.GET.lists %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ artworks.previous_page_number }}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in artworks.paginator.page_range %}
+                            {% if artworks.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% elif num > artworks.number|add:'-3' and num < artworks.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" 
+                                   href="?{% for key, value in request.GET.lists %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if artworks.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="?{% for key, value in request.GET.lists %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ artworks.next_page_number }}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+            {% else %}
+                <!-- Нет результатов -->
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-search display-1 text-muted"></i>
+                    </div>
+                    <h3 class="mb-3">Картин не найдено</h3>
+                    <p class="text-muted mb-4">
+                        {% if query %}
+                            По запросу "{{ query }}" ничего не найдено.
+                        {% else %}
+                            Попробуйте изменить параметры фильтров.
+                        {% endif %}
+                    </p>
+                    <button type="button" class="btn btn-primary" id="reset-filters-no-results">
+                        <i class="bi bi-arrow-clockwise me-2"></i> Сбросить фильтры
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/catalog.js' %}"></script>
+{% endblock %}

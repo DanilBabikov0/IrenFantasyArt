@@ -1,0 +1,147 @@
+{% extends 'artworks/base.html' %}
+{% load static %}
+
+{% block title %}Условия покупки и доставки | IrenFantasyArt{% endblock %}
+
+{% block meta_description %}
+Условия покупки и доставки авторских картин. Оригинальные работы в единственном экземпляре. Оплата и доставка по согласованию.
+{% endblock %}
+
+{% block meta_keywords %}условия покупки, доставка картин, оплата, возврат, авторские картины{% endblock %}
+
+{% block og_title %}Условия покупки и доставки | IrenFantasyArt{% endblock %}
+{% block og_description %}Информация об оплате, доставке и условиях покупки авторских картин.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/term.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="terms-page py-5">
+    <div class="container">
+        <div class="terms-container">
+            <div class="terms-card">
+                <!-- Заголовок -->
+                <div class="terms-header">
+                    <h1 class="terms-title">Условия покупки и доставки</h1>
+                    <p class="terms-subtitle">Информация для покупателей авторских картин</p>
+                </div>
+
+                <!-- Основной контент -->
+                <div class="terms-content">
+                    <!-- Раздел 1 -->
+                    <div class="term-section">
+                        <div class="term-number">1</div>
+                        <h2 class="term-heading">О работах</h2>
+                        <p class="term-text">
+                            Все картины, представленные на сайте:
+                        </p>
+                        <ul class="term-list">
+                            <li>являются оригинальными авторскими работами</li>
+                            <li>существуют в единственном экземпляре</li>
+                            <li>не повторяются и не тиражируются</li>
+                        </ul>
+                    </div>
+
+                    <!-- Раздел 2 -->
+                    <div class="term-section">
+                        <div class="term-number">2</div>
+                        <h2 class="term-heading">Цвет и отображение</h2>
+                        <p class="term-text">
+                            Цвета картины могут незначительно отличаться в зависимости от настроек экрана и освещения.
+                        </p>
+                        <div class="highlight">
+                            <p>Я всегда готова дополнительно показать работу на фото или видео перед покупкой.</p>
+                        </div>
+                    </div>
+
+                    <!-- Раздел 3 -->
+                    <div class="term-section">
+                        <div class="term-number">3</div>
+                        <h2 class="term-heading">Оплата</h2>
+                        <p class="term-text">
+                            Оплата осуществляется после личного согласования:
+                        </p>
+                        <ul class="term-list">
+                            <li>переводом удобным способом</li>
+                            <li>без автоматической корзины и онлайн-кассы</li>
+                        </ul>
+                        <div class="highlight">
+                            <p>Все детали обсуждаются индивидуально.</p>
+                        </div>
+                    </div>
+
+                    <!-- Раздел 4 -->
+                    <div class="term-section">
+                        <div class="term-number">4</div>
+                        <h2 class="term-heading">Доставка</h2>
+                        <ul class="term-list">
+                            <li>картины надёжно упаковываются</li>
+                            <li>отправка осуществляется после оплаты</li>
+                            <li>способ доставки обсуждается отдельно</li>
+                        </ul>
+                    </div>
+
+                    <!-- Раздел 5 -->
+                    <div class="term-section">
+                        <div class="term-number">5</div>
+                        <h2 class="term-heading">Возврат</h2>
+                        <p class="term-text">
+                            Каждая ситуация рассматривается индивидуально.
+                        </p>
+                        <div class="highlight">
+                            <p>Если у вас есть вопросы или сомнения — лучше обсудить их до покупки, я всегда на связи.</p>
+                        </div>
+                    </div>
+
+                    <!-- Раздел 6 -->
+                    <div class="term-section">
+                        <div class="term-number">6</div>
+                        <h2 class="term-heading">Связь</h2>
+                        <p class="term-text">
+                            По любым вопросам можно написать:
+                        </p>
+                        <ul class="term-list">
+                            <li>
+                                в 
+                                <a href="{{ TELEGRAM_LINK }}">
+                                    Telegram
+                                </a>
+                            </li>
+                            <li>
+                                на 
+                                <a href="mailto:{{ EMAIL_ADDRESS }}">
+                                    электронную почту 
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Плавная прокрутка для якорей (если будут добавлены)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId !== '#') {
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,358 @@
+/* Герой-секция */
+.hero-section {
+    padding-top: 2rem;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #2c3e50;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: #495057;
+    line-height: 1.6;
+    max-width: 90%;
+}
+
+.hero-buttons .btn {
+    min-width: 200px;
+}
+
+.hero-image {
+    height: 500px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.hero-placeholder {
+    border-radius: 15px;
+}
+
+/* Популярные картины */
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #4a6fa5, #166088);
+    border-radius: 2px;
+}
+
+.artwork-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.artwork-card.animate-in {
+    animation: cardAppear 0.6s forwards;
+}
+
+@keyframes cardAppear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.artwork-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.artwork-card .card-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+}
+
+.artwork-card .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.artwork-card:hover .card-img-top {
+    transform: scale(1.08);
+}
+
+.artwork-card .card-body {
+    padding: 1.5rem;
+}
+
+.artwork-card .card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.artwork-card:hover .card-title {
+    color: #4a6fa5 !important;
+}
+
+.category-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.category-image-wrapper {
+    height: 200px;
+    overflow: hidden;
+}
+
+.category-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.category-card:hover .category-image {
+    transform: scale(1.05);
+}
+
+.category-placeholder {
+    width: 100%;
+    height: 200px;
+}
+
+/* Посты блога */
+.recent-posts {
+    background: #f8f9fa;
+    padding: 3rem 0;
+    margin: 3rem 0;
+}
+
+.post-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.post-card.animate-in {
+    animation: cardAppear 0.6s forwards;
+}
+
+.post-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+}
+
+.post-card .card-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+}
+
+.post-card .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.post-card:hover .card-img-top {
+    transform: scale(1.08);
+}
+
+.post-card .card-body {
+    padding: 1.5rem;
+}
+
+.post-card .card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.post-card:hover .card-title {
+    color: #4a6fa5 !important;
+}
+
+/* Призыв к действию */
+.cta-section {
+    padding: 3rem 0;
+}
+
+.cta-card {
+    background: linear-gradient(135deg, #4a6fa5 0%, #166088 100%);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.cta-card .card-body {
+    color: white;
+}
+
+.cta-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.cta-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.cta-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cta-card .btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+}
+
+.cta-card .btn-primary {
+    background: white;
+    color: #4a6fa5;
+    border: none;
+}
+
+.cta-card .btn-primary:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+}
+
+.cta-card .btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cta-card .btn-outline-primary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+    transform: translateY(-2px);
+}
+
+/* Карусель */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 1rem;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    width: 80%;
+    bottom: 2rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero-image {
+        height: 350px;
+    }
+    
+    .section-title {
+        font-size: 1.6rem;
+    }
+    
+    .cta-title {
+        font-size: 1.8rem;
+    }
+    
+    .cta-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero-buttons .btn {
+        min-width: auto;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .hero-image {
+        height: 300px;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+    }
+    
+    .artwork-card .card-img-wrapper,
+    .post-card .card-img-wrapper {
+        height: 200px;
+    }
+    
+    .cta-card .card-body {
+        padding: 1.5rem;
+    }
+}
+
+/* Задержка анимации для карточек */
+.artwork-card:nth-child(1) { animation-delay: 0.1s; }
+.artwork-card:nth-child(2) { animation-delay: 0.2s; }
+.artwork-card:nth-child(3) { animation-delay: 0.3s; }
+.artwork-card:nth-child(4) { animation-delay: 0.4s; }
+.artwork-card:nth-child(5) { animation-delay: 0.5s; }
+.artwork-card:nth-child(6) { animation-delay: 0.6s; }
+
+.post-card:nth-child(1) { animation-delay: 0.1s; }
+.post-card:nth-child(2) { animation-delay: 0.2s; }
+.post-card:nth-child(3) { animation-delay: 0.3s; }
+.post-card:nth-child(4) { animation-delay: 0.4s; }

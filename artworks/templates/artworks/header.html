@@ -1,0 +1,123 @@
+<!-- artworks/templates/artworks/header.html -->
+{% load static %}
+<header class="sticky-top bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light py-1">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center me-4" href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" 
+                     alt="Галерея" 
+                     height="40"
+                     class="d-inline-block align-top me-2">
+                <div class="d-flex flex-column">
+                    <span class="fw-bold text-dark fs-5 lh-1">IrenFantasyArt</span>
+                    <small class="text-muted fw-normal lh-1 d-none d-md-block" style="font-size: 0.7rem;">
+                        Уникальные картины для вашего дома
+                    </small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto align-items-center">
+                    <!-- Каталог -->
+                    <li class="nav-item me-3">
+                        <a class="nav-link fw-medium" href="{% url 'catalog' %}">
+                            <i class="bi bi-grid me-1"></i>Каталог
+                        </a>
+                    </li>
+                    
+                    <!-- Коллекции -->
+                    <li class="nav-item dropdown me-3">
+                        <a class="nav-link dropdown-toggle fw-medium" href="#" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-collection me-1"></i>Коллекции
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-scrollable p-2" style="min-width: 250px; max-height: 400px; overflow-y: auto;">
+                            <div id="collectionList">
+                                {% for collection in collections|slice:":5" %}
+                                <a class="dropdown-item d-flex align-items-center py-2 px-2 mb-1 rounded collection-item" 
+                                   href="{% url 'collection_detail' collection.slug %}"
+                                   data-name="{{ collection.name|lower }}">
+                                    {% if collection.image %}
+                                    <img src="{{ collection.image.url }}" alt="{{ collection.name }}" 
+                                         class="me-2 rounded" style="width: 24px; height: 24px; object-fit: cover;">
+                                    {% else %}
+                                    <i class="bi bi-image me-2 text-muted"></i>
+                                    {% endif %}
+                                    <div class="flex-grow-1">
+                                        <div class="fw-medium">{{ collection.name|truncatechars:25 }}</div>
+                                        <small class="text-muted">{{ collection.artwork_count }} работ</small>
+                                    </div>
+                                </a>
+                                {% empty %}
+                                <div class="text-center text-muted py-2">
+                                    Коллекций пока нет
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <hr class="my-2">
+                            <div class="text-center">
+                                <a href="{% url 'collections' %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-arrow-right-circle me-1"></i>
+                                    Все коллекции
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <!-- Блог -->
+                    <li class="nav-item me-3">
+                        <a class="nav-link fw-medium" href="{% url 'blog_list' %}">
+                            <i class="bi bi-journal-text me-1"></i>Блог
+                        </a>
+                    </li>
+                    
+                    <!-- Обо мне -->
+                    <li class="nav-item me-3">
+                        <a class="nav-link fw-medium" href="{% url 'about' %}">
+                            <i class="bi bi-person me-1"></i>Обо мне
+                        </a>
+                    </li>
+                    
+                    <!-- Контакты -->
+                    <li class="nav-item me-3">
+                        <a class="nav-link fw-medium" href="{% url 'contact' %}">
+                            <i class="bi bi-envelope me-1"></i>Контакты
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Телеграмм и поиск -->
+                <div class="d-flex align-items-center">
+                    <!-- Кнопка телеграмма -->
+                    <a href="{{ TELEGRAM_LINK }}" 
+                       target="_blank" 
+                       class="btn btn-primary btn-sm me-3 d-flex align-items-center"
+                       style="background: linear-gradient(135deg, #0088cc, #24a1e0); border: none;">
+                        <i class="bi bi-telegram me-1"></i>
+                        <span class="d-none d-md-inline">Написать</span>
+                    </a>
+                    
+                    <!-- Поиск по всему сайту -->
+                    <form class="d-flex position-relative" action="{% url 'search' %}" method="get">
+                        <input type="text" 
+                               class="form-control form-control-sm" 
+                               name="q" 
+                               placeholder="Поиск..." 
+                               style="width: 200px;"
+                               aria-label="Поиск"
+                               value="{{ request.GET.q }}">
+                        <button type="submit" class="btn btn-primary btn-sm position-absolute end-0" 
+                                style="z-index: 2; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

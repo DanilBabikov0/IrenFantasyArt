@@ -1,0 +1,274 @@
+{% extends 'artworks/base.html' %}
+{% load static %}
+
+{% block title %}Блог о живописи и искусстве | IrenFantasyArt{% endblock %}
+
+{% block meta_description %}
+Блог художника. Статьи о живописи, процессе создания картин, вдохновении, искусстве и творчестве.
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/blog.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Основной контент -->
+        <div class="col-lg-8">
+            <div class="mb-5">
+                <h1 class="display-5 fw-bold mb-3">Блог художника</h1>
+                <p class="lead text-muted">
+                    Мысли о творчестве, процессе работы, вдохновении и искусстве
+                </p>
+            </div>
+            
+            <!-- Поиск и фильтры -->
+            <div class="row mb-5">
+                <div class="col-md-8">
+                    <form method="get" action="{% url 'blog_list' %}" class="search-form">
+                        <div class="input-group">
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   name="q" 
+                                   placeholder="Поиск по блогу..." 
+                                   value="{{ query }}"
+                                   aria-label="Поиск по блогу">
+                            <button class="btn btn-primary btn-lg" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Облако тегов -->
+            {% if top_tags %}
+            <div class="mb-5">
+                <h3 class="h5 mb-3">Популярные теги:</h3>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for tag, count in top_tags %}
+                    <a href="{% url 'blog_list' %}?tag={{ tag|urlencode }}" 
+                       class="btn btn-sm btn-outline-secondary position-relative">
+                        {{ tag }}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                            {{ count }}
+                        </span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Список постов -->
+            {% if posts %}
+                {% for post in posts %}
+                <article class="blog-post-card card border-0 shadow-sm mb-5">
+                    <div class="row g-0">
+                        {% if post.preview_image %}
+                        <div class="col-md-4">
+                            <img src="{{ post.preview_image.url }}" 
+                                 class="img-fluid rounded-start h-100 object-fit-cover" 
+                                 alt="{{ post.title }}"
+                                 style="height: 250px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-8">
+                        {% else %}
+                        <div class="col-12">
+                        {% endif %}
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <small class="text-muted">
+                                            <i class="bi bi-person me-1"></i>
+                                            {% if post.author.get_full_name %}
+                                                {{ post.author.get_full_name }}
+                                            {% else %}
+                                                {{ post.author.username }}
+                                            {% endif %}
+                                        </small>
+                                        <small class="text-muted ms-3">
+                                            <i class="bi bi-calendar me-1"></i>
+                                            {{ post.published_at|date:"d.m.Y" }}
+                                        </small>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="bi bi-eye me-1"></i>{{ post.views }}
+                                    </small>
+                                </div>
+                                
+                                <h2 class="card-title h4 mb-3">
+                                    <a href="{{ post.get_absolute_url }}" class="text-decoration-none text-dark">
+                                        {{ post.title }}
+                                    </a>
+                                </h2>
+                                
+                                {% if post.excerpt %}
+                                <p class="card-text text-muted mb-3">
+                                    {{ post.excerpt }}
+                                </p>
+                                {% endif %}
+                                
+                                <!-- Теги поста -->
+                                {% if post.tags %}
+                                <div class="mb-3">
+                                    {% for tag in post.get_tags_list %}
+                                    <a href="{% url 'blog_list' %}?tag={{ tag|urlencode }}" 
+                                       class="badge bg-light text-dark me-1 mb-1">
+                                        <i class="bi bi-tag me-1"></i>{{ tag }}
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                
+                                <a href="{{ post.get_absolute_url }}" class="btn btn-primary">
+                                    Читать далее <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+                
+                <!-- Пагинация -->
+                {% if is_paginated %}
+                <nav aria-label="Пагинация блога" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" 
+                                   href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+            {% else %}
+                <!-- Нет постов -->
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-journal-text display-1 text-muted"></i>
+                    </div>
+                    <h3 class="mb-3">Постов пока нет</h3>
+                    <p class="text-muted">
+                        {% if query %}
+                            По запросу "{{ query }}" ничего не найдено.
+                        {% else %}
+                            Скоро здесь появятся интересные статьи!
+                        {% endif %}
+                    </p>
+                    {% if query %}
+                    <a href="{% url 'blog_list' %}" class="btn btn-primary">
+                        <i class="bi bi-arrow-left me-2"></i>Вернуться к блогу
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Боковая колонка -->
+        <div class="col-lg-4">
+            <!-- Обо мне в блоге -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                            <i class="bi bi-palette text-primary fs-2"></i>
+                        </div>
+                        <h3 class="h5 mb-2">О блоге</h3>
+                        <p class="text-muted small">
+                            Здесь я делюсь мыслями о творчестве, процессе работы и вдохновении.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Популярные посты -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="h5 mb-3 d-flex align-items-center">
+                        <i class="bi bi-fire text-primary me-2"></i>
+                        Популярные статьи
+                    </h4>
+                    <ul class="list-unstyled mb-0">
+                        {% for post in popular_posts %}
+                        <li class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                            <a href="{{ post.get_absolute_url }}" class="text-decoration-none text-dark">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1 me-3">
+                                        <h6 class="mb-1">{{ post.title }}</h6>
+                                        <small class="text-muted">
+                                            <i class="bi bi-eye me-1"></i>{{ post.views }}
+                                            <i class="bi bi-calendar ms-2 me-1"></i>{{ post.published_at|date:"d.m.Y" }}
+                                        </small>
+                                    </div>
+                                    {% if post.preview_image %}
+                                    <img src="{{ post.preview_image.url }}" 
+                                         alt="{{ post.title }}"
+                                         class="rounded" 
+                                         width="60" 
+                                         height="60"
+                                         style="object-fit: cover;">
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </li>
+                        {% empty %}
+                        <li class="text-muted">Пока нет популярных статей</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Последние посты -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h4 class="h5 mb-3 d-flex align-items-center">
+                        <i class="bi bi-clock text-primary me-2"></i>
+                        Недавние статьи
+                    </h4>
+                    <ul class="list-unstyled mb-0">
+                        {% for post in recent_posts %}
+                        <li class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                            <a href="{{ post.get_absolute_url }}" class="text-decoration-none text-dark">
+                                <h6 class="mb-1">{{ post.title }}</h6>
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar me-1"></i>{{ post.published_at|date:"d.m.Y" }}
+                                </small>
+                            </a>
+                        </li>
+                        {% empty %}
+                        <li class="text-muted">Пока нет статей</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

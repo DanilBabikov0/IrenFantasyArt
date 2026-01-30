@@ -1,0 +1,333 @@
+{% extends 'artworks/base.html' %}
+{% load static %}
+
+{% block title %}{{ artwork.title }} | IrenFantasyArt{% endblock %}
+
+{% block meta_description %}
+{{ artwork.short_description|truncatechars:150 }}.
+{% if artwork.category %}{{ artwork.category.name }} {% endif %}
+{{ artwork.created_year }} года. Размер: {{ artwork.get_dimensions }}. {{ artwork.get_price_display }}.
+{% endblock %}
+
+{% block meta_keywords %}
+{{ artwork.title }},
+{% if artwork.category %}{{ artwork.category.name }},{% endif %}
+{% if artwork.theme %}{{ artwork.theme.name }},{% endif %}
+картины, художник, купить картину
+{% endblock %}
+
+{% block og_title %}{{ artwork.title }} | IrenFantasyArt{% endblock %}
+{% block og_description %}{{ artwork.short_description|truncatechars:150 }}{% endblock %}
+{% block og_image %}{% if artwork.images.first %}{{ artwork.images.first.image.url }}{% else %}{% static 'images/og-image.jpg' %}{% endif %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Хлебные крошки -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog' %}">Каталог</a></li>
+            {% if artwork.category %}
+            <li class="breadcrumb-item"><a href="{% url 'catalog' %}?category={{ artwork.category.id }}">{{ artwork.category.name }}</a></li>
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">{{ artwork.title|truncatechars:30 }}</li>
+        </ol>
+    </nav>
+    
+    <!-- Основная информация о картине -->
+    <div class="artwork-detail">
+        <!-- Заголовок и мета-информация -->
+        <div class="artwork-header">
+            <h1 class="artwork-title">{{ artwork.title }}</h1>
+            
+            <div class="artwork-meta">
+                {% if artwork.category %}
+                <span class="meta-item">
+                    <i class="bi bi-palette"></i> {{ artwork.category.name }}
+                </span>
+                {% endif %}
+                
+                {% if artwork.theme %}
+                <span class="meta-item">
+                    <i class="bi bi-tag"></i> {{ artwork.theme.name }}
+                </span>
+                {% endif %}
+                
+                <span class="meta-item">
+                    <i class="bi bi-rulers"></i> {{ artwork.get_dimensions }}
+                </span>
+                
+                <span class="meta-item">
+                    <i class="bi bi-eye"></i> {{ artwork.views }} просмотров
+                </span>
+            </div>
+            
+            <div class="status-badge status-{{ artwork.status }}">
+                {{ artwork.get_status_display }}
+            </div>
+        </div>
+        
+        <!-- Основной контент: галерея слева, детали справа -->
+        <div class="artwork-main-content">
+            <!-- Левая колонка: галерея -->
+            <div class="artwork-gallery-column">
+                {% if artwork.images.all %}
+                    <!-- Основное изображение -->
+                    <div class="main-image-container">
+                        <img id="mainImage" 
+                             src="{{ artwork.images.first.image.url }}" 
+                             alt="{{ artwork.title }}" 
+                             class="main-image"
+                             data-bs-toggle="modal" 
+                             data-bs-target="#imageModal">
+                        
+                        <button class="zoom-btn" data-bs-toggle="modal" data-bs-target="#imageModal">
+                            <i class="bi bi-zoom-in"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Миниатюры -->
+                    <div class="thumbnails">
+                        {% for img in artwork.images.all %}
+                        <img src="{{ img.image.url }}" 
+                             alt="{{ artwork.title }} - {{ forloop.counter }}"
+                             class="thumbnail {% if forloop.first %}active{% endif %}"
+                             data-image-url="{{ img.image.url }}">
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-image">
+                        <i class="bi bi-image display-1 text-muted mb-3"></i>
+                        <p class="text-muted">Изображение отсутствует</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Правая колонка: детали -->
+            <div class="artwork-details-column">
+                <div class="details-card">
+                    <h3>Детали</h3>
+                    
+                    {% if artwork.category %}
+                    <div class="detail-row">
+                        <span class="detail-label">Категория:</span>
+                        <span class="detail-value">{{ artwork.category.name }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if artwork.theme %}
+                    <div class="detail-row">
+                        <span class="detail-label">Тематика:</span>
+                        <span class="detail-value">{{ artwork.theme.name }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if artwork.collection %}
+                    <div class="detail-row">
+                        <span class="detail-label">Коллекция:</span>
+                        <span class="detail-value">
+                            <a href="{% url 'collection_detail' artwork.collection.slug %}" class="text-decoration-none">
+                                {{ artwork.collection.name }}
+                            </a>
+                        </span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">Год создания:</span>
+                        <span class="detail-value">{{ artwork.created_year }}</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">Размер:</span>
+                        <span class="detail-value">{{ artwork.get_dimensions }}</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">Статус:</span>
+                        <span class="detail-value">{{ artwork.get_status_display }}</span>
+                    </div>
+                    
+                    <div class="price">
+                        {{ artwork.get_price_display }}
+                    </div>
+                    
+                    {% if artwork.status == 'available' %}
+                        {% if artwork.purchase_url %}
+                            <a href="{{ artwork.purchase_url }}" target="_blank" class="buy-button" rel="noopener noreferrer">
+                                <i class="bi bi-cart me-2"></i> Купить онлайн
+                            </a>
+                        {% else %}
+                            <a href="mailto:{{ EMAIL_ADDRESS }}" class="buy-button">
+                                <i class="bi bi-envelope me-2"></i> Забронировать
+                            </a>
+                        {% endif %}
+                    {% elif artwork.status == 'sold' %}
+                        <button class="buy-button sold" disabled>
+                            <i class="bi bi-x-circle me-2"></i> Продана
+                        </button>
+                    {% else %}
+                        <button class="buy-button private" disabled>
+                            <i class="bi bi-lock me-2"></i> В частной коллекции
+                        </button>
+                    {% endif %}
+                    <div class="d-flex justify-content-center mt-4"></div>
+                    <a href="{{ TELEGRAM_LINK }}" target="_blank" class="btn btn-primary btn-sm mx-auto d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #0088cc, #24a1e0); border: none; padding: 0.6rem 1.2rem;">
+                        <i class="bi bi-telegram"></i>
+                        <span class="d-none d-md-inline">Задать вопрос</span>
+                    </a>
+                    </div>
+                    <!-- Кнопка "Поделиться" -->
+                    <button id="shareButton" class="share-button">
+                        <i class="bi bi-share me-2"></i> Поделиться
+                    </button>
+                    
+                    <!-- Кнопка "Назад в каталог" -->
+                    <a href="{% url 'catalog' %}" class="btn btn-outline-secondary w-100 mt-2">
+                        <i class="bi bi-arrow-left me-2"></i> Вернуться в каталог
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Описание и теги (внизу) -->
+        <div class="artwork-description-section">
+            <h3>О картине</h3>
+            <div class="description-text">
+                {{ artwork.description|linebreaks }}
+            </div>
+            
+            {% if artwork.short_description and artwork.short_description != artwork.description %}
+            <div class="short-description">
+                <p>{{ artwork.short_description }}</p>
+            </div>
+            {% endif %}
+            
+            <!-- Теги -->
+            {% if artwork.tags %}
+            <div class="tags">
+                {% for tag in artwork.get_tags_list %}
+                    <a href="{% url 'catalog' %}?q={{ tag|urlencode }}" class="tag">
+                        #{{ tag }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Работы из коллекции -->
+    {% if artwork.collection and collection_artworks %}
+    <div class="similar-section">
+        <h2 class="section-title">Другие работы из коллекции "{{ artwork.collection.name }}"</h2>
+        <div class="similar-grid">
+            {% for art in collection_artworks %}
+            <a href="{{ art.get_absolute_url }}" class="similar-card">
+                {% if art.images.all %}
+                    <img src="{{ art.images.first.image.url }}" alt="{{ art.title }}" loading="lazy">
+                {% else %}
+                    <div class="no-image-placeholder">
+                        <i class="bi bi-image text-muted"></i>
+                    </div>
+                {% endif %}
+                <div class="similar-card-content">
+                    <div class="similar-card-title">{{ art.title|truncatechars:40 }}</div>
+                    <div class="similar-card-meta">
+                        {{ art.get_dimensions }} • {{ art.created_year }}
+                    </div>
+                    <div class="similar-card-price">
+                        {{ art.get_price_display }}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'collection_detail' artwork.collection.slug %}" class="btn btn-outline-primary">
+                Посмотреть всю коллекцию
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Похожие работы (показываем всегда, даже если есть коллекция) -->
+    {% if similar_artworks %}
+    <div class="similar-section">
+        <h2 class="section-title">Похожие работы</h2>
+        <div class="similar-grid">
+            {% for similar in similar_artworks %}
+            <a href="{{ similar.get_absolute_url }}" class="similar-card">
+                {% if similar.images.all %}
+                    <img src="{{ similar.images.first.image.url }}" alt="{{ similar.title }}" loading="lazy">
+                {% else %}
+                    <div class="no-image-placeholder">
+                        <i class="bi bi-image text-muted"></i>
+                    </div>
+                {% endif %}
+                <div class="similar-card-content">
+                    <div class="similar-card-title">{{ similar.title|truncatechars:40 }}</div>
+                    <div class="similar-card-meta">
+                        {{ similar.get_dimensions }} • {{ similar.created_year }}
+                    </div>
+                    <div class="similar-card-price">
+                        {{ similar.get_price_display }}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Модальное окно для увеличенного изображения -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-fit">
+        <div class="modal-content border-0">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-0">
+                <img id="modalImage" src="" alt="" class="modal-image">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для расшаривания -->
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel">Поделиться картиной</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="share-url-container">
+                    <input type="text" id="shareUrl" class="form-control" value="{{ request.build_absolute_uri }}" readonly>
+                    <button class="btn btn-outline-secondary" onclick="copyToClipboard()">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                </div>
+                <div class="social-share mt-3">
+                    <a href="https://vk.com/share.php?url={{ request.build_absolute_uri|urlencode }}&title={{ artwork.title|urlencode }}" 
+                       target="_blank" class="btn btn-vk">
+                        <i class="bi bi-vk"></i> ВКонтакте
+                    </a>
+                    <a href="https://telegram.me/share/url?url={{ request.build_absolute_uri|urlencode }}&text={{ artwork.title|urlencode }}" 
+                       target="_blank" class="btn btn-telegram">
+                        <i class="bi bi-telegram"></i> Telegram
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/detail.js' %}"></script>
+{% endblock %}

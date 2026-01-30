@@ -1,0 +1,88 @@
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row">
+            <!-- Информация -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">IrenFantasyArt</h5>
+                <p class="text-light">
+                    Оригинальные картины маслом, пастелью и графика.
+                    Все работы выполнены в единственном экземпляре.
+                </p>
+                <p class="text-light">
+                    © {% now "Y" %} Все права защищены.
+                </p>
+            </div>
+            
+            <!-- Навигация -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">Навигация</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="{% url 'catalog' %}" class="text-decoration-none text-light">
+                            <i class="bi bi-book me-2"></i>
+                            Каталог картин
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'collections' %}" class="text-decoration-none text-light">
+                            <i class="bi bi-images me-2"></i>
+                            Коллекции
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'about' %}" class="text-decoration-none text-light">
+                            <i class="bi bi-person me-2"></i>
+                            О художнике
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'blog_list' %}" class="text-decoration-none text-light">
+                            <i class="bi bi-chat-left-text me-2"></i>
+                            Блог
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Контакты -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">Контакты</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="bi bi-telephone me-2"></i>
+                        <a href="{% url 'contact' %}" class="text-decoration-none text-light">
+                            Контакты
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-truck me-2"></i>
+                        <a href="{% url 'terms' %}" class="text-decoration-none text-light">
+                            Условия доставки    
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-envelope me-2"></i>
+                        <a href="mailto:{{ EMAIL_ADDRESS }}" class="text-decoration-none text-light">
+                            {{ EMAIL_ADDRESS }}
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        <span class="text-light">{{ ADDRESS }}</span>
+                    </li>
+                    
+                </ul>
+                
+                <!-- Соцсети -->
+                <div class="mt-4">
+                    <a href="{{ TELEGRAM_LINK }}" class="text-decoration-none text-light me-3">
+                        <i class="bi bi-telegram fs-5"></i>
+                    </a>
+                    <a href="{{ PINTEREST_LINK }}" class="text-decoration-none text-light">
+                        <i class="bi bi-pinterest fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

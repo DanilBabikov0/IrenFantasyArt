@@ -1,0 +1,247 @@
+/* static/blog/css/blog.css */
+
+/* Стили для блога */
+
+/* Карточка поста в списке */
+.blog-post-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.blog-post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Контент поста */
+.post-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+.post-content h2 {
+    font-size: 1.8rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.post-content h3 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.post-content h4 {
+    font-size: 1.3rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.post-content p {
+    margin-bottom: 1.5rem;
+}
+
+.post-content ul, .post-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.post-content li {
+    margin-bottom: 0.5rem;
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.post-content blockquote {
+    border-left: 4px solid #4a6fa5;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #555;
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 0 8px 8px 0;
+}
+
+.post-content code {
+    background-color: #f5f5f5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #d63384;
+}
+
+.post-content pre {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin: 2rem 0;
+}
+
+.post-content pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+.post-content table {
+    width: 100%;
+    margin: 2rem 0;
+    border-collapse: collapse;
+}
+
+.post-content table th,
+.post-content table td {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+}
+
+.post-content table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.post-content table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* Оглавление */
+.toc-wrapper {
+    position: sticky;
+    top: 120px;
+}
+
+.toc-content ul {
+    list-style-type: none;
+    padding-left: 0.5rem;
+    margin-bottom: 0;
+}
+
+.toc-content li {
+    margin-bottom: 0.5rem;
+}
+
+.toc-content a {
+    color: #495057;
+    text-decoration: none;
+    transition: color 0.2s;
+    display: block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.toc-content a:hover {
+    color: #0d6efd;
+    background-color: #f8f9fa;
+}
+
+.toc-content a.active {
+    color: #0d6efd;
+    background-color: #e7f1ff;
+    font-weight: 600;
+}
+
+.toc-content > ul > li {
+    margin-bottom: 0.75rem;
+}
+
+.toc-content ul ul {
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+    border-left: 2px solid #e9ecef;
+}
+
+.toc-content ul ul a {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+/* Стили для поиска */
+.search-form .form-control:focus {
+    border-color: #4a6fa5;
+    box-shadow: 0 0 0 0.25rem rgba(74, 111, 165, 0.25);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .blog-post-card .row.g-0 {
+        flex-direction: column;
+    }
+    
+    .blog-post-card .col-md-4,
+    .blog-post-card .col-md-8 {
+        width: 100%;
+    }
+    
+    .blog-post-card img {
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .post-content {
+        font-size: 1rem;
+    }
+    
+    .post-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .post-content h3 {
+        font-size: 1.3rem;
+    }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.blog-post {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Стили для hover эффектов */
+.hover-shadow {
+    transition: box-shadow 0.3s ease;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Стили для кнопок тегов */
+.badge.bg-light {
+    transition: all 0.2s;
+}
+
+.badge.bg-light:hover {
+    background-color: #4a6fa5 !important;
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+/* Стили для изображений в посте */
+.post-content img {
+    transition: transform 0.3s ease;
+}
+
+.post-content img:hover {
+    transform: scale(1.02);
+}

@@ -1,0 +1,597 @@
+/* Основные стили детальной страницы */
+.artwork-detail {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.artwork-header {
+    padding: 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.artwork-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.artwork-meta {
+    display: flex;
+    gap: 2rem;
+    color: #666;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Основной контент: галерея слева, детали справа */
+.artwork-main-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 3rem;
+    padding: 2rem;
+}
+
+@media (max-width: 1200px) {
+    .artwork-main-content {
+        grid-template-columns: 1fr 350px;
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .artwork-main-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+/* Левая колонка: галерея */
+.artwork-gallery-column {
+    order: 1;
+}
+
+.main-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #f8f9fa;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-image {
+    width: 100%;
+    max-height: 600px;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s;
+}
+
+.main-image:hover {
+    transform: scale(1.01);
+}
+
+.zoom-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.zoom-btn:hover {
+    background: white;
+    transform: scale(1.1);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+}
+
+.thumbnails {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+    background: #f8f9fa;
+}
+
+.thumbnail:hover, .thumbnail.active {
+    border-color: #4a6fa5;
+    transform: scale(1.05);
+}
+
+.no-image {
+    text-align: center;
+    padding: 3rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    color: #6c757d;
+}
+
+/* Правая колонка: детали */
+.artwork-details-column {
+    order: 2;
+}
+
+.details-card {
+    background: #f8f9fa;
+    padding: 1.8rem;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    position: sticky;
+    top: 20px;
+}
+
+.details-card h3 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    font-size: 1.4rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid #4a6fa5;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: #495057;
+    font-weight: 500;
+}
+
+.detail-value {
+    color: #2c3e50;
+    font-weight: 500;
+    text-align: right;
+}
+
+.detail-value a:hover {
+    color: #4a6fa5;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4a6fa5;
+    margin: 1.5rem 0;
+    text-align: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+}
+
+.buy-button {
+    display: block;
+    width: 100%;
+    padding: 1.1rem;
+    background: #4a6fa5;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 1rem;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.buy-button:hover {
+    background: #166088;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 111, 165, 0.3);
+}
+
+.buy-button.sold {
+    background: #dc3545;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.buy-button.private {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.share-button {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background: #f8f9fa;
+    color: #495057;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-top: 1rem;
+    transition: all 0.3s;
+    border: 1px solid #dee2e6;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.share-button:hover {
+    background: #e9ecef;
+    color: #4a6fa5;
+    border-color: #4a6fa5;
+}
+
+/* Описание внизу */
+.artwork-description-section {
+    padding: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.artwork-description-section h3 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    font-size: 1.4rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid #4a6fa5;
+}
+
+.description-text {
+    line-height: 1.8;
+    color: #555;
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+}
+
+.description-text p {
+    margin-bottom: 1.2rem;
+}
+
+.short-description {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #4a6fa5;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #495057;
+}
+
+/* Теги */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.tag {
+    background: #e8f4fc;
+    color: #4a6fa5;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.tag:hover {
+    background: #4a6fa5;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Статус */
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.status-available {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-sold {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-private {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Хлебные крошки */
+.breadcrumb-nav {
+    background: transparent;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-item a {
+    color: #4a6fa5;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.breadcrumb-item a:hover {
+    color: #166088;
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Похожие работы / коллекция */
+.similar-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.similar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.8rem;
+}
+
+@media (max-width: 768px) {
+    .similar-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+.similar-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #eee;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.similar-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.similar-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.no-image-placeholder {
+    width: 100%;
+    height: 220px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #adb5bd;
+}
+
+.similar-card-content {
+    padding: 1.2rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.similar-card-title {
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    flex-grow: 1;
+}
+
+.similar-card-meta {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+}
+
+.similar-card-price {
+    font-weight: bold;
+    color: #4a6fa5;
+    font-size: 1.05rem;
+    margin-top: auto;
+}
+
+/* Модальные окна */
+.modal-fit {
+    max-width: 90%;
+    margin: 1.75rem auto;
+}
+
+.modal-fit .modal-content {
+    background: transparent;
+    border: none;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.share-url-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-vk {
+    background: #4a76a8;
+    color: white;
+    margin-right: 0.5rem;
+}
+
+.btn-vk:hover {
+    background: #3a6698;
+    color: white;
+}
+
+.btn-telegram {
+    background: #0088cc;
+    color: white;
+}
+
+.btn-telegram:hover {
+    background: #0077bb;
+    color: white;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .artwork-title {
+        font-size: 1.8rem;
+    }
+    
+    .artwork-meta {
+        gap: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .artwork-header,
+    .artwork-main-content,
+    .artwork-description-section {
+        padding: 1.2rem;
+    }
+    
+    .price {
+        font-size: 1.6rem;
+    }
+    
+    .details-card {
+        padding: 1.2rem;
+        position: static;
+    }
+    
+    .thumbnails {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .modal-fit {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 576px) {
+    .thumbnails {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .artwork-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Дополнительные стили для модального окна изображения */
+.modal-fit .modal-dialog {
+    transition: all 0.3s ease;
+    max-width: none;
+}
+
+.modal-fit .modal-content {
+    background: rgba(0, 0, 0, 0);
+    box-shadow: none;
+}
+
+.modal-fit .modal-header {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    padding: 0;
+    border: none;
+}
+
+.modal-fit .btn-close {
+    background-color: white;
+    opacity: 0.8;
+    padding: 10px;
+    background-size: 1.2em;
+}
+
+.modal-fit .btn-close:hover {
+    opacity: 1;
+}
+
+/* Анимация появления изображения */
+.main-image {
+    transition: opacity 0.3s ease;
+}
+
+/* Стили для копирования ссылки */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}

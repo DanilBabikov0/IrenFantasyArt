@@ -1,0 +1,770 @@
+/* Основные стили страницы коллекции */
+
+/* Шапка коллекции с каруселью */
+.collection-header {
+    position: relative;
+    height: 70vh;
+    min-height: 500px;
+    color: white;
+    margin-bottom: 3rem;
+    overflow: hidden;
+}
+
+/* Карусель коллекции */
+.collection-carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+    height: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+}
+
+.carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
+}
+
+.carousel-image-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+/* Навигация карусели */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.carousel-nav:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav.prev {
+    left: 2rem;
+}
+
+.carousel-nav.next {
+    right: 2rem;
+}
+
+/* Индикаторы слайдов */
+.carousel-indicators {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    z-index: 10;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.indicator:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.2);
+}
+
+.indicator.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* Контент поверх карусели */
+.header-content {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Хлебные крошки - исправлено для отображения в одну линию */
+.collection-breadcrumb {
+    margin-bottom: 2rem;
+}
+
+.collection-breadcrumb .breadcrumb {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.collection-breadcrumb .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.collection-breadcrumb .breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.collection-breadcrumb .breadcrumb-item a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.collection-breadcrumb .breadcrumb-item.active {
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.collection-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+    color: rgba(255, 255, 255, 0.6);
+    content: "/";
+    padding: 0 0.5rem;
+    float: none;
+}
+
+/* Заголовок и описание - сдвигаем вправо чтобы не перекрывалось кнопкой */
+.collection-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    animation: fadeInDown 1s ease;
+    padding-left: 70px; /* Сдвигаем от кнопки карусели */
+    padding-right: 70px; /* Симметрично с правой стороны */
+}
+
+.collection-description {
+    max-width: 700px;
+    margin-bottom: 2rem;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    opacity: 0.95;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1s ease 0.3s both;
+    padding-left: 70px; /* Сдвигаем от кнопки карусели */
+    padding-right: 70px; /* Симметрично с правой стороны */
+}
+
+/* Статистика - тоже сдвигаем */
+.collection-stats {
+    display: flex;
+    gap: 2rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    padding-left: 70px; /* Сдвигаем от кнопки карусели */
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.2rem 1.8rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-width: 130px;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px);
+}
+
+.stat-number {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Кнопка назад */
+.back-button {
+    margin-bottom: 2.5rem;
+}
+
+.back-button .btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+}
+
+/* Работы в коллекции */
+.collection-artworks {
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #4a6fa5;
+}
+
+/* Сетка картин */
+.artworks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.collection-artwork-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #e9ecef;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.collection-artwork-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: #4a6fa5;
+}
+
+.collection-artwork-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.collection-artwork-card:hover .collection-artwork-image {
+    transform: scale(1.1);
+}
+
+.collection-artwork-image.no-image {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.collection-artwork-image.no-image i {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.collection-artwork-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.collection-artwork-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #2c3e50;
+    line-height: 1.4;
+}
+
+.collection-artwork-meta {
+    display: flex;
+    justify-content: space-between;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.collection-artwork-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.collection-artwork-price {
+    font-weight: 700;
+    color: #4a6fa5;
+    font-size: 1.15rem;
+}
+
+/* Статусы картин */
+.collection-artwork-status {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-available {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+}
+
+.status-sold {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+}
+
+.status-private {
+    background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+    color: #0c5460;
+}
+
+/* Пустая коллекция */
+.empty-collection {
+    text-align: center;
+    padding: 5rem 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    margin: 2rem 0;
+}
+
+.empty-icon {
+    font-size: 5rem;
+    color: #4a6fa5;
+    margin-bottom: 1.5rem;
+    opacity: 0.3;
+}
+
+.empty-collection h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.empty-collection p {
+    color: #6c757d;
+    margin-bottom: 2rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.empty-collection .btn {
+    padding: 0.75rem 2rem;
+}
+
+/* Пагинация */
+.pagination-container {
+    margin-top: 3rem;
+}
+
+.pagination {
+    gap: 0.5rem;
+}
+
+.page-link {
+    border: 1px solid #dee2e6;
+    color: #4a6fa5;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    background-color: #4a6fa5;
+    color: white;
+    border-color: #4a6fa5;
+}
+
+.page-item.active .page-link {
+    background-color: #4a6fa5;
+    border-color: #4a6fa5;
+    color: white;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+/* Навигация по другим коллекциям */
+.collections-navigation {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 2px solid #e9ecef;
+}
+
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.nav-collection {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.nav-collection:hover {
+    background: white;
+    transform: translateX(8px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: #4a6fa5;
+}
+
+.nav-collection img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.nav-collection-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.nav-collection-icon i {
+    font-size: 1.5rem;
+    color: white;
+    opacity: 0.8;
+}
+
+.nav-collection-info {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.nav-collection-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-collection-count {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .collection-title {
+        font-size: 2.5rem;
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+    
+    .collection-description,
+    .collection-stats {
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+    
+    .artworks-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .collection-header {
+        height: 60vh;
+        min-height: 400px;
+    }
+    
+    .collection-title {
+        font-size: 2.2rem;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    
+    .collection-description {
+        font-size: 1.05rem;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    
+    .collection-stats {
+        padding-left: 50px;
+    }
+    
+    .stat-item {
+        padding: 1rem 1.5rem;
+        min-width: 110px;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+    }
+    
+    .carousel-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .carousel-nav.prev {
+        left: 1rem;
+    }
+    
+    .carousel-nav.next {
+        right: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .collection-header {
+        height: 50vh;
+        min-height: 350px;
+    }
+    
+    .collection-title {
+        font-size: 1.8rem;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+    
+    .collection-description,
+    .collection-stats {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+    
+    .collection-stats {
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        padding: 0.8rem 1.2rem;
+        min-width: 100px;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .artworks-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.2rem;
+    }
+    
+    .nav-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+    
+    /* Уменьшаем отступы для мобильных */
+    .collection-breadcrumb .breadcrumb {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Делаем хлебные крошки более компактными на мобильных */
+    .collection-breadcrumb .breadcrumb-item {
+        max-width: 45%;
+    }
+    
+    .collection-breadcrumb .breadcrumb-item.active {
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+    .collection-header {
+        height: 40vh;
+        min-height: 300px;
+    }
+    
+    .collection-title {
+        font-size: 1.6rem;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .collection-description {
+        font-size: 0.95rem;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .collection-stats {
+        padding-left: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+    }
+    
+    .stat-item {
+        width: 100%;
+        max-width: 200px;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem;
+    }
+    
+    .artworks-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .collection-artwork-image {
+        height: 200px;
+    }
+    
+    .carousel-indicators {
+        bottom: 1rem;
+    }
+    
+    .indicator {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .nav-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* На очень маленьких экранах скрываем кнопки карусели */
+    @media (max-width: 400px) {
+        .carousel-nav {
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+        }
+        
+        .carousel-nav.prev {
+            left: 0.5rem;
+        }
+        
+        .carousel-nav.next {
+            right: 0.5rem;
+        }
+    }
+}

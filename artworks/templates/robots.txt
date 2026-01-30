@@ -1,0 +1,136 @@
+User-agent: *
+Allow: /
+Allow: /catalog/
+Allow: /artwork/
+Allow: /collections/
+Allow: /collection/
+Allow: /about/
+Allow: /contact/
+Allow: /terms/
+Allow: /search/
+Allow: /blog/
+Allow: /post/
+
+Disallow: /admin/
+Disallow: /ckeditor/
+Disallow: /ckeditor/upload/
+Disallow: /ckeditor/browse/
+Disallow: /media/ckeditor_uploads/
+Disallow: /static/admin/
+Disallow: /static/ckeditor/
+Disallow: /accounts/
+Disallow: /api/
+Disallow: /private/
+Disallow: /test/
+Disallow: /debug/
+
+Disallow: /*?order=*
+Disallow: /*?page=*
+Disallow: /*?per_page=*
+Disallow: /*?q=*
+Disallow: /*?category=*
+Disallow: /*?theme=*
+Disallow: /*?size=*
+Disallow: /*?price_min=*
+Disallow: /*?price_max=*
+
+Disallow: /*?*
+Disallow: /*.php$
+Disallow: /*.asp$
+Disallow: /*.aspx$
+
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /*.json$
+Disallow: /*.xml$
+Allow: /sitemap.xml
+
+Crawl-delay: 2
+
+Host: irenfantasyart.ru
+
+Sitemap: https://irenfantasyart.ru/sitemap.xml
+Sitemap: https://irenfantasyart.ru/sitemap-index.xml
+
+User-agent: Googlebot
+Allow: /*.css$
+Allow: /*.js$
+Crawl-delay: 1
+Allow: /catalog/?order=*
+Allow: /catalog/?page=*
+Allow: /catalog/?per_page=*
+Allow: /catalog/?q=*
+Allow: /catalog/?category=*
+Allow: /catalog/?theme=*
+Allow: /catalog/?size=*
+Allow: /catalog/?price_min=*
+Allow: /catalog/?price_max=*
+
+User-agent: Yandex
+Allow: /*.css$
+Allow: /*.js$
+Crawl-delay: 2
+Clean-param: ref /catalog/
+Clean-param: from /catalog/
+Clean-param: utm_source&utm_medium&utm_campaign /
+Clean-param: fbclid&gclid&yclid /
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+Disallow: /
+
+User-agent: SemrushBot
+Crawl-delay: 10
+Disallow: /
+
+User-agent: MJ12bot
+Crawl-delay: 20
+Disallow: /
+
+User-agent: DotBot
+Crawl-delay: 15
+Disallow: /
+
+User-agent: MegaIndex
+Crawl-delay: 20
+Disallow: /
+
+User-agent: FacebookExternalHit
+Allow: /
+Crawl-delay: 1
+
+User-agent: Twitterbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: LinkedInBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Pinterest
+Allow: /
+Crawl-delay: 1
+
+# Боты архивов
+User-agent: archive.org_bot
+Allow: /
+Crawl-delay: 5
+
+User-agent: ia_archiver
+Allow: /
+Crawl-delay: 5
+
+User-agent: Nessus
+Disallow: /
+
+User-agent: Nikto
+Disallow: /
+
+User-agent: sqlmap
+Disallow: /
+
+User-agent: Acunetix
+Disallow: /
+
+User-agent: dirbuster
+Disallow: /

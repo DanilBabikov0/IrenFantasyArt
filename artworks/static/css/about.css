@@ -1,0 +1,439 @@
+/* Основные стили для страницы "Обо мне" */
+.page-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 1.2rem;
+    color: #6c757d;
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+/* Карточка с биографией */
+.author-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 15px;
+    height: 100%;
+}
+
+.author-photo {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.biography-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #495057;
+}
+
+.biography-text p {
+    margin-bottom: 1.2rem;
+}
+
+/* Контакты */
+.contacts-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    border: 1px solid #dee2e6;
+    height: 100%;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #2c3e50;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #4a6fa5;
+    display: inline-block;
+}
+
+.contact-item {
+    padding: 1rem;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: #4a6fa5;
+}
+
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(74, 111, 165, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.contact-link {
+    color: #4a6fa5;
+    font-weight: 500;
+}
+
+.contact-link:hover {
+    color: #166088;
+    text-decoration: underline;
+}
+
+/* Где купить */
+.buy-places-card {
+    background: rgba(74, 111, 165, 0.08);
+    border: 1px solid rgba(74, 111, 165, 0.2);
+    border-radius: 10px;
+}
+
+.buy-places-card h4 {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.buy-places-card ul li {
+    padding: 0.25rem 0;
+    color: #495057;
+}
+
+.buy-places-card ul li i {
+    font-size: 0.9rem;
+}
+
+/* Горизонтальная прокрутка */
+.horizontal-scroll-wrapper {
+    position: relative;
+    overflow: hidden;
+    padding: 10px 0 20px;
+}
+
+.horizontal-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 10px 5px 20px;
+    scrollbar-width: thin;
+    scrollbar-color: #4a6fa5 #f1f1f1;
+    -webkit-overflow-scrolling: touch;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #4a6fa5, #166088);
+    border-radius: 10px;
+}
+
+.scroll-item {
+    flex: 0 0 auto;
+    width: 280px;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.card-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2.2rem;
+    }
+    
+    .page-subtitle {
+        font-size: 1rem;
+    }
+    
+    .author-photo {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .biography-text {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .scroll-item {
+        width: 240px;
+    }
+    
+    .card-img-top {
+        height: 180px;
+    }
+    
+    .horizontal-scroll-container {
+        gap: 15px;
+        padding: 10px 5px 15px;
+    }
+    
+    .contact-item {
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.8rem;
+    }
+    
+    .author-photo {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .scroll-item {
+        width: 220px;
+    }
+    
+    .card-img-top {
+        height: 160px;
+    }
+    
+    .contacts-card .card-body,
+    .author-card .card-body {
+        padding: 1.25rem;
+    }
+    
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .contact-icon i {
+        font-size: 1.2rem;
+    }
+}
+
+/* Стили для карточек преимуществ и процесса */
+.purchase-process-card, .advantages-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 15px;
+    border: 1px solid #dee2e6;
+    height: 100%;
+}
+
+.purchase-step {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background: white;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.purchase-step:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: #4a6fa5;
+}
+
+.purchase-step:last-child {
+    margin-bottom: 0;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4a6fa5, #166088);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.advantage-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background: white;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.advantage-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: #28a745;
+}
+
+.advantage-item:last-child {
+    margin-bottom: 0;
+}
+
+.advantage-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.advantage-content h4 {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+/* Стили для карточек процесса создания */
+.process-image-card {
+    height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.process-image-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+.process-image-card .card-img-wrapper {
+    height: 250px;
+    overflow: hidden;
+}
+
+.process-image-card .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.process-image-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.process-image-card .card-body {
+    padding: 1.5rem;
+}
+
+.process-image-card h4 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.process-image-card p {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+/* Адаптивность для новых блоков */
+@media (max-width: 768px) {
+    .purchase-step, .advantage-item {
+        padding: 0.5rem;
+    }
+    
+    .step-number, .advantage-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+        margin-right: 0.75rem;
+    }
+    
+    .step-content h4, .advantage-content h4 {
+        font-size: 1rem;
+    }
+    
+    .process-image-card .card-img-wrapper {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .purchase-process-card, .advantages-card {
+        margin-bottom: 1rem;
+    }
+    
+    .process-image-card .card-img-wrapper {
+        height: 180px;
+    }
+}

@@ -1,0 +1,171 @@
+{% extends 'artworks/base.html' %}
+{% load static %}
+
+{% block title %}Коллекции картин | IrenFantasyArt{% endblock %}
+
+{% block meta_description %}
+Коллекции картин художника. {{ collections|length }} тематических коллекций. Купить картины по коллекциям: пейзажи, портреты, натюрморты и другие.
+{% endblock %}
+
+{% block meta_keywords %}коллекции картин, тематические коллекции, картины по коллекциям, пейзажи, портреты, натюрморты{% endblock %}
+
+{% block og_title %}Коллекции картин | IrenFantasyArt{% endblock %}
+{% block og_description %}Коллекции картин художника. {{ collections|length }} тематических коллекций{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/collections.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Шапка страницы с каруселью -->
+<div class="collections-header">
+    <!-- Карусель коллекций -->
+    {% if collections_with_images %}
+    <div class="collections-carousel">
+        <div class="carousel-container" id="collectionsCarousel">
+            <div class="carousel-track">
+                {% for collection in collections_with_images %}
+                <div class="carousel-slide {% if forloop.first %}active{% endif %}" 
+                     data-slide="{{ forloop.counter0 }}">
+                    {% if collection.image %}
+                    <img src="{{ collection.image.url }}" 
+                         alt="{{ collection.name }}" 
+                         class="carousel-image"
+                         loading="lazy">
+                    {% endif %}
+                    <div class="carousel-overlay"></div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Навигация карусели -->
+            <button class="carousel-nav prev" aria-label="Предыдущий слайд">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="carousel-nav next" aria-label="Следующий слайд">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+            
+            <!-- Индикаторы слайдов -->
+            <div class="carousel-indicators">
+                {% for collection in collections_with_images %}
+                <button class="indicator {% if forloop.first %}active{% endif %}" 
+                        data-slide="{{ forloop.counter0 }}"
+                        aria-label="Перейти к слайду {{ forloop.counter }}">
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="container text-center header-content">
+        <h1 class="collections-title">Коллекции картин</h1>
+        <p class="collections-description">
+            Тематические подборки работ, объединенные общей идеей, стилем или техникой исполнения
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Статистика -->
+    {% if collections %}
+    <div class="collections-stats">
+        <div class="collections-stat-item">
+            <div class="collections-stat-number">{{ collections|length }}</div>
+            <div class="collections-stat-label">коллекций</div>
+        </div>
+        
+        <div class="collections-stat-item">
+            <div class="collections-stat-number">{{ total_artworks }}</div>
+            <div class="collections-stat-label">работ всего</div>
+        </div>
+        
+        {% if available_artworks %}
+        <div class="collections-stat-item">
+            <div class="collections-stat-number">{{ available_artworks }}</div>
+            <div class="collections-stat-label">доступно</div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <!-- Сетка коллекций -->
+    <div class="collections-grid">
+        {% for collection in collections %}
+        <a href="{% url 'collection_detail' collection.slug %}" class="collection-card">
+            {% if collection.image %}
+                <img src="{{ collection.image.url }}" 
+                     alt="{{ collection.name }}" 
+                     class="collection-image"
+                     loading="lazy">
+            {% else %}
+                <div class="collection-no-image">
+                    <i class="bi bi-collection no-image-icon"></i>
+                </div>
+            {% endif %}
+            
+            <div class="collection-content">
+                <h3 class="collection-name">{{ collection.name }}</h3>
+                
+                {% if collection.description %}
+                    <p class="collection-description-short">
+                        {{ collection.description|truncatechars:150 }}
+                    </p>
+                {% else %}
+                    <p class="collection-description-short text-muted">
+                        Коллекция картин
+                    </p>
+                {% endif %}
+                
+                <div class="collection-stats">
+                    <div class="collection-count">
+                        {{ collection.artwork_count }} работ
+                    </div>
+                    <span class="collection-link">
+                        Смотреть
+                        <i class="bi bi-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <!-- Нет коллекций -->
+        <div class="empty-collections">
+            <div class="empty-icon">
+                <i class="bi bi-collection"></i>
+            </div>
+            <h3 class="h4 mb-3">Коллекций пока нет</h3>
+            <p class="text-muted mb-4">
+                Художественные коллекции будут добавлены позже.
+            </p>
+            <a href="{% url 'catalog' %}" class="btn btn-primary">
+                <i class="bi bi-grid me-2"></i> Перейти в каталог
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Призыв к действию -->
+    {% if collections %}
+    <div class="text-center py-4 border-top">
+        <h3 class="h4 mb-3">Не нашли подходящую коллекцию?</h3>
+        <p class="text-muted mb-4">
+            Просмотрите все работы в каталоге или свяжитесь с нами для индивидуального подбора
+        </p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="{% url 'catalog' %}" class="btn btn-primary">
+                <i class="bi bi-grid me-2"></i> Весь каталог
+            </a>
+            <a href="{% url 'contact' %}" class="btn btn-outline-primary">
+                <i class="bi bi-envelope me-2"></i> Консультация
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/collections.js' %}"></script>
+{% endblock %}
