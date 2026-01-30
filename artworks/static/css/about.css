@@ -38,12 +38,25 @@
     margin-bottom: 1.2rem;
 }
 
-/* Контакты */
+/* Контакты - исправлено для заполнения всей высоты */
 .contacts-card {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 15px;
     border: 1px solid #dee2e6;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.contacts-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0 !important;
+}
+
+.contacts-card-content {
+    flex: 1;
 }
 
 .section-title {
@@ -90,11 +103,12 @@
     text-decoration: underline;
 }
 
-/* Где купить */
+/* Где купить - исправлено для прижатия к низу */
 .buy-places-card {
     background: rgba(74, 111, 165, 0.08);
     border: 1px solid rgba(74, 111, 165, 0.2);
     border-radius: 10px;
+    margin-top: auto;
 }
 
 .buy-places-card h4 {
@@ -146,12 +160,16 @@
 .scroll-item {
     flex: 0 0 auto;
     width: 280px;
+    display: flex;
 }
 
 .card-link {
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 }
 
 .card-link:hover {
@@ -163,6 +181,9 @@
     transition: all 0.3s ease;
     border-radius: 10px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .card:hover {
@@ -173,12 +194,13 @@
 .card-img-wrapper {
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .card-img-top {
     height: 200px;
-    object-fit: cover;
     width: 100%;
+    object-fit: cover;
     transition: transform 0.5s ease;
 }
 
@@ -188,12 +210,32 @@
 
 .card-body {
     padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-title {
     font-weight: 600;
     color: #2c3e50;
     margin-bottom: 0.5rem;
+}
+
+/* Карточки одинаковой высоты */
+.horizontal-scroll-container {
+    align-items: stretch;
+}
+
+.scroll-item .card {
+    height: 100%;
+}
+
+.scroll-item .card-body {
+    flex: 1;
+}
+
+.scroll-item .card-body > div:last-child {
+    margin-top: auto;
 }
 
 /* Адаптивность */
@@ -277,6 +319,15 @@
     border-radius: 15px;
     border: 1px solid #dee2e6;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.purchase-process-card .card-body,
+.advantages-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .purchase-step {
@@ -288,6 +339,7 @@
     margin-bottom: 0.75rem;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
+    min-height: 85px;
 }
 
 .purchase-step:hover {
@@ -315,10 +367,18 @@
     flex-shrink: 0;
 }
 
+.step-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 40px;
+}
+
 .step-content h4 {
     color: #2c3e50;
     font-size: 1.1rem;
     margin-bottom: 0.25rem;
+    line-height: 1.3;
 }
 
 .advantage-item {
@@ -330,6 +390,7 @@
     margin-bottom: 0.75rem;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
+    min-height: 85px;
 }
 
 .advantage-item:hover {
@@ -356,18 +417,27 @@
     flex-shrink: 0;
 }
 
+.advantage-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 40px;
+}
+
 .advantage-content h4 {
     color: #2c3e50;
     font-size: 1.1rem;
     margin-bottom: 0;
+    line-height: 1.3;
 }
 
-/* Стили для карточек процесса создания */
+/* Стили для карточек процесса создания - квадратные */
 .process-image-card {
-    height: 100%;
     border-radius: 15px;
     overflow: hidden;
     transition: all 0.3s ease;
+    aspect-ratio: 1 / 1; /* Делаем квадратными */
+    width: 100%;
 }
 
 .process-image-card:hover {
@@ -376,7 +446,8 @@
 }
 
 .process-image-card .card-img-wrapper {
-    height: 250px;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
 }
 
@@ -391,25 +462,21 @@
     transform: scale(1.05);
 }
 
-.process-image-card .card-body {
-    padding: 1.5rem;
+/* Выравнивание высоты блоков преимуществ и процесса */
+.row.mb-5:has(.advantages-card) {
+    display: flex;
 }
 
-.process-image-card h4 {
-    color: #2c3e50;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.process-image-card p {
-    color: #6c757d;
-    margin-bottom: 0;
+.row.mb-5:has(.advantages-card) > .col-lg-6 {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Адаптивность для новых блоков */
 @media (max-width: 768px) {
     .purchase-step, .advantage-item {
         padding: 0.5rem;
+        min-height: 75px;
     }
     
     .step-number, .advantage-icon {
@@ -423,8 +490,8 @@
         font-size: 1rem;
     }
     
-    .process-image-card .card-img-wrapper {
-        height: 200px;
+    .process-image-card {
+        aspect-ratio: 16/9; /* На мобильных делаем прямоугольными */
     }
 }
 
@@ -433,7 +500,20 @@
         margin-bottom: 1rem;
     }
     
-    .process-image-card .card-img-wrapper {
-        height: 180px;
+    .process-image-card {
+        aspect-ratio: 16/9;
+        margin-bottom: 1rem;
     }
+}
+
+/* Дополнительные фиксы */
+.contacts-card .text-center.mt-4 {
+    margin-top: auto !important;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.purchase-process-card .card-body > div:last-child,
+.advantages-card .card-body > div:last-child {
+    margin-top: auto;
 }

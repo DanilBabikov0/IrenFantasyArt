@@ -4,7 +4,10 @@ from django.utils.text import slugify
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from io import BytesIO
+from PIL import Image
+from django.core.files.base import ContentFile
+import os
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название категории")
@@ -230,15 +233,74 @@ class ArtworkImage(models.Model):
         ordering = ['order', 'id']
     
     def save(self, *args, **kwargs):
+        # Флаг для отслеживания, было ли изображение сжато
+        is_new_image = False
+        
+        # Сжимаем изображение только при первой загрузке или изменении
+        if self.image and not self.pk:
+            is_new_image = True
+        elif self.image and self.pk:
+            # Проверяем, изменилось ли изображение
+            try:
+                old_instance = ArtworkImage.objects.get(pk=self.pk)
+                if old_instance.image != self.image:
+                    is_new_image = True
+            except ArtworkImage.DoesNotExist:
+                is_new_image = True
+        
+        # Сжимаем только новые или изменённые изображения
+        if is_new_image and self.image:
+            try:
+                img = Image.open(self.image)
+                
+                # Максимальные размеры
+                max_width = 2000
+                max_height = 2000
+                
+                # Изменяем размер если нужно
+                if img.width > max_width or img.height > max_height:
+                    img.thumbnail((max_width, max_height), Image.Resampling.LANCZOS)
+                
+                # Конвертируем в RGB если нужно
+                if img.mode in ('RGBA', 'LA', 'P'):
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    if img.mode in ('RGBA', 'LA'):
+                        background.paste(img, mask=img.split()[-1])
+                    else:
+                        background.paste(img)
+                    img = background
+                
+                # Сохраняем в буфер
+                img_io = BytesIO()
+                img.save(img_io, format='JPEG', quality=85, optimize=True)
+                img_io.seek(0)
+                
+                # Сохраняем файл с новым именем
+                original_name = os.path.basename(self.image.name)
+                name, ext = os.path.splitext(original_name)
+                new_name = f"{name}_compressed.jpg"
+                
+                self.image.save(
+                    new_name,
+                    ContentFile(img_io.getvalue()),
+                    save=False
+                )
+            except Exception as e:
+                # Если ошибка при сжатии, оставляем оригинальное изображение
+                print(f"Ошибка сжатия изображения: {e}")
+        
+        # Устанавливаем первичное изображение
         if not self.pk and not ArtworkImage.objects.filter(artwork=self.artwork).exists():
             self.is_primary = True
         
+        # Гарантируем только одно первичное изображение
         if self.is_primary:
             ArtworkImage.objects.filter(
                 artwork=self.artwork, 
                 is_primary=True
             ).exclude(pk=self.pk).update(is_primary=False)
         
+        # Сохраняем модель
         super().save(*args, **kwargs)
     
     def __str__(self):

@@ -23,7 +23,7 @@
         <div class="row align-items-center">
             <!-- Текстовая часть -->
             <div class="col-lg-6 mb-5 mb-lg-0">
-                <h1 class="hero-title mb-4">Художник Ирина Бабикова</h1>
+                <h1 class="hero-title mb-4">Ирен Фентази Арт</h1>
                 <p class="hero-subtitle lead mb-4">Оригинальные картины пастелью, маслом</p>
                 
                 <div class="hero-buttons d-flex flex-wrap gap-3">
@@ -99,7 +99,7 @@
 <!-- Категории картин -->
 <section class="categories-section mb-5">
     <div class="container">
-        <h2 class="section-title mb-5">Категории картин</h2>
+        <h2 class="section-title mb-5">Картины для вашего интерьера</h2>
         
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             <!-- Масло -->
@@ -179,12 +179,12 @@
             
             <!-- Большие -->
             <div class="col">
-                <a href="{% url 'catalog' %}?size=large" class="category-card card border-0 shadow-sm h-100 text-decoration-none">
+                <a href="{% url 'collections' %}" class="category-card card border-0 shadow-sm h-100 text-decoration-none">
                     <div class="category-image-wrapper">
-                        {% if large_artwork and large_artwork.images.all %}
-                        <img src="{{ large_artwork.images.first.image.url }}" 
+                        {% if artwork_in_collection and artwork_in_collection.images.all %}
+                        <img src="{{ artwork_in_collection.images.first.image.url }}" 
                              class="category-image" 
-                             alt="Большие картины"
+                             alt="Коллекции картин"
                              loading="lazy">
                         {% else %}
                         <div class="category-placeholder bg-light d-flex align-items-center justify-content-center">
@@ -193,8 +193,8 @@
                         {% endif %}
                     </div>
                     <div class="card-body text-center">
-                        <h5 class="card-title text-dark mb-1">Большие картины</h5>
-                        <p class="text-muted small">Свыше 40×60 см</p>
+                        <h5 class="card-title text-dark mb-1">Коллекции картин</h5>
+                        <p class="text-muted small">Картины объединенные общей темой</p>
                         <span class="btn btn-sm btn-outline-primary mt-2">
                             Смотреть <i class="bi bi-arrow-right ms-1"></i>
                         </span>
@@ -228,9 +228,9 @@
             <div class="col">
                 <div class="post-card card border-0 shadow-sm h-100">
                     <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
-                        {% if post.image %}
+                        {% if post.preview_image %}
                         <div class="card-img-wrapper">
-                            <img src="{{ post.image.url }}" 
+                            <img src="{{ post.preview_image.url }}" 
                                  class="card-img-top" 
                                  alt="{{ post.title }}" 
                                  loading="lazy">

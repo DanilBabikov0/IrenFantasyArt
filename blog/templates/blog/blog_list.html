@@ -45,7 +45,7 @@
             <!-- Облако тегов -->
             {% if top_tags %}
             <div class="mb-5">
-                <h3 class="h5 mb-3">Популярные теги:</h3>
+                <h3 class="h5 mb-3">Популярные теги в блоге:</h3>
                 <div class="d-flex flex-wrap gap-2">
                     {% for tag, count in top_tags %}
                     <a href="{% url 'blog_list' %}?tag={{ tag|urlencode }}" 
@@ -233,7 +233,8 @@
                                          class="rounded" 
                                          width="60" 
                                          height="60"
-                                         style="object-fit: cover;">
+                                         style="object-fit: cover;"
+                                         loading="lazy">
                                     {% endif %}
                                 </div>
                             </a>

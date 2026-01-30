@@ -127,7 +127,7 @@
     line-height: 1.6;
 }
 
-/* Горизонтальная прокрутка */
+/* Горизонтальная прокрутка - ОБНОВЛЕНО */
 .horizontal-scroll-wrapper {
     position: relative;
     overflow: hidden;
@@ -143,6 +143,7 @@
     scrollbar-width: thin;
     scrollbar-color: #4a6fa5 #f1f1f1;
     -webkit-overflow-scrolling: touch;
+    align-items: stretch; /* Выравнивание по высоте */
 }
 
 .horizontal-scroll-container::-webkit-scrollbar {
@@ -162,12 +163,16 @@
 .scroll-item {
     flex: 0 0 auto;
     width: 280px;
+    display: flex; /* Добавлено для выравнивания */
+    flex-direction: column; /* Добавлено для выравнивания */
 }
 
 .card-link {
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: flex; /* Изменено на flex */
+    flex-direction: column; /* Добавлено для выравнивания */
+    height: 100%; /* Добавлено для выравнивания */
 }
 
 .card-link:hover {
@@ -179,6 +184,9 @@
     transition: all 0.3s ease;
     border-radius: 10px;
     overflow: hidden;
+    display: flex; /* Добавлено для выравнивания */
+    flex-direction: column; /* Добавлено для выравнивания */
+    flex: 1; /* Добавлено для выравнивания */
 }
 
 .card:hover {
@@ -189,6 +197,7 @@
 .card-img-wrapper {
     position: relative;
     overflow: hidden;
+    flex-shrink: 0; /* Предотвращает сжатие изображения */
 }
 
 .card-img-top {
@@ -204,12 +213,31 @@
 
 .card-body {
     padding: 1.25rem;
+    flex: 1; /* Добавлено для выравнивания */
+    display: flex; /* Добавлено для выравнивания */
+    flex-direction: column; /* Добавлено для выравнивания */
 }
 
 .card-title {
     font-weight: 600;
     color: #2c3e50;
     margin-bottom: 0.5rem;
+}
+
+/* Выравнивание контента внутри карточки для постов */
+.card-text {
+    flex: 1; /* Растягивает текст для заполнения пространства */
+    margin-bottom: 1rem;
+}
+
+/* Для картин: цена должна быть внизу */
+.horizontal-scroll-container .card-body > .mt-3:last-child {
+    margin-top: auto; /* Прижимает цену к низу */
+}
+
+/* Специфичные стили для постов */
+.horizontal-scroll-wrapper .scroll-item .card-img-top[style*="height:150px"] {
+    height: 150px !important; /* Переопределение инлайнового стиля */
 }
 
 /* Адаптивность */

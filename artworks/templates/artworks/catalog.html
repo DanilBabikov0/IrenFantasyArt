@@ -19,8 +19,9 @@
         <div class="col-lg-3 col-md-4 mb-4">
             <!-- Кнопка для показа фильтров на мобильных -->
             <button type="button" class="btn btn-outline-primary w-100 d-lg-none mb-3 filter-toggle-btn" 
-                    id="filter-toggle">
-                <i class="bi bi-funnel me-2"></i> Показать фильтры
+            id="filter-toggle">
+                <i class="bi bi-funnel me-2"></i>
+                <span class="btn-text">Показать фильтры</span>
                 {% if request.GET and filtered_count < total_count %}
                 <span class="badge bg-primary ms-2" id="mobile-filter-count">{{ filtered_count }}</span>
                 {% endif %}
@@ -212,8 +213,6 @@
                         <select class="form-select form-select-sm sorting-select" id="sort-select">
                             <option value="-created_at" {% if current_order == '-created_at' %}selected{% endif %}>Сначала новые</option>
                             <option value="created_at" {% if current_order == 'created_at' %}selected{% endif %}>Сначала старые</option>
-                            <option value="-created_year" {% if current_order == '-created_year' %}selected{% endif %}>Последние годы</option>
-                            <option value="created_year" {% if current_order == 'created_year' %}selected{% endif %}>Ранние годы</option>
                             <option value="price" {% if current_order == 'price' %}selected{% endif %}>Цена по возрастанию</option>
                             <option value="-price" {% if current_order == '-price' %}selected{% endif %}>Цена по убыванию</option>
                             <option value="-views" {% if current_order == '-views' %}selected{% endif %}>Сначала популярные</option>

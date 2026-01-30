@@ -195,24 +195,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Показать/скрыть фильтры на мобильных
     if (filterToggleBtn && filterCard) {
-        filterToggleBtn.addEventListener('click', function() {
-            filterCard.classList.toggle('show');
-            const icon = this.querySelector('i');
-            const text = this.querySelector('.btn-text') || document.createElement('span');
-            
-            if (!text.classList.contains('btn-text')) {
-                text.className = 'btn-text';
-                this.appendChild(text);
-            }
-            
-            if (filterCard.classList.contains('show')) {
-                icon.className = 'bi bi-x-lg me-2';
-                text.textContent = ' Скрыть фильтры';
-            } else {
-                icon.className = 'bi bi-funnel me-2';
-                text.textContent = ' Показать фильтры';
-            }
-        });
+        const btnTextElement = filterToggleBtn.querySelector('.btn-text');
+        const icon = filterToggleBtn.querySelector('i');
+        
+        if (btnTextElement && icon) {
+            filterToggleBtn.addEventListener('click', function() {
+                filterCard.classList.toggle('show');
+                
+                if (filterCard.classList.contains('show')) {
+                    icon.className = 'bi bi-x-lg me-2';
+                    btnTextElement.textContent = 'Скрыть фильтры';
+                } else {
+                    icon.className = 'bi bi-funnel me-2';
+                    btnTextElement.textContent = 'Показать фильтры';
+                }
+            });
+        }
     }
     
     // Подсчет активных фильтров (исправленная версия)

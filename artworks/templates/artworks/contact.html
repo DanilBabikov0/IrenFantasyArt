@@ -106,7 +106,7 @@
                             </h3>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    Я работаю с акрилом, маслом, акварелью на холсте и бумаге. Также есть опыт в цифровой живописи. Материалы подбираются под конкретную задачу.
+                                    Я работаю с пастелью, маслом на холсте и специальной бумаге.
                                 </div>
                             </div>
                         </div>
@@ -115,12 +115,12 @@
                         <div class="accordion-item border-0 mb-3">
                             <h3 class="accordion-header" id="headingThree">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    Есть ли доставка в другие города/страны?
+                                    Есть ли доставка в другие города?
                                 </button>
                             </h3>
                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    Да, отправляю картины по всему миру с надежной упаковкой. Стоимость доставки рассчитывается индивидуально в зависимости от размера и пункта назначения.
+                                    Да, отправляю картины по всей России с надежной упаковкой.
                                 </div>
                             </div>
                         </div>
@@ -134,7 +134,7 @@
                             </h3>
                             <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    Сроки зависят от сложности работы и загруженности. Обычно от 2 до 4 недель. При срочном заказе обсуждается индивидуально.
+                                    Обычно от 2 до 4 недель.
                                 </div>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                             </h3>
                             <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    Да, по предварительной договорённости можно организовать просмотр в Москве. Для других городов отправляю дополнительные фото и видео по запросу.
+                                    Да, по предварительной договорённости отправляю дополнительные фото и видео.
                                 </div>
                             </div>
                         </div>
@@ -189,7 +189,7 @@
                         </div>
                         <div>
                             <h4 class="h6 mb-1">Доставка</h4>
-                            <p class="text-muted small mb-0">По всему миру</p>
+                            <p class="text-muted small mb-0">По всей России</p>
                         </div>
                     </div>
 
@@ -275,9 +275,9 @@
                     <div class="scroll-item">
                         <a href="{{ post.get_absolute_url }}" class="card-link">
                             <div class="card border-0 shadow-sm h-100">
-                                {% if post.image %}
+                                {% if post.preview_image %}
                                     <div class="card-img-wrapper">
-                                        <img src="{{ post.image.url }}" 
+                                        <img src="{{ post.preview_image.url }}" 
                                              class="card-img-top" 
                                              alt="{{ post.title }}" 
                                              loading="lazy">

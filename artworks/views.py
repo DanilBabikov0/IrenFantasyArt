@@ -1,6 +1,6 @@
 # artworks/views.py
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Count, Q
+from django.db.models import Prefetch, Count, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Artwork, Category, Theme, Collection, ArtworkImage
 from .filters import ArtworkFilter
@@ -31,7 +31,6 @@ def catalog(request):
         '-created_at', 'created_at', 
         'price', '-price', 
         '-views', 
-        '-created_year', 'created_year',
         'title', '-title'
     ]
     if order_by in valid_orders:
@@ -155,13 +154,14 @@ def collections_list(request):
     collections = Collection.objects.annotate(
         artwork_count=Count('artwork')
     ).order_by('name')
-    
-    collections_with_images = collections.exclude(
-        Q(image='') | Q(image__isnull=True)
-    )[:10]
+
+    collections_with_images = Collection.objects.filter(
+        Q(image__isnull=False) & ~Q(image='')
+    ).annotate(
+        artwork_count=Count('artwork')
+    ).order_by('name')[:10]
     
     total_artworks = Artwork.objects.filter(collection__isnull=False).count()
-
     available_artworks = Artwork.objects.filter(
         status='available',
         collection__isnull=False
@@ -183,19 +183,26 @@ def collection_detail(request, slug):
     
     artworks_qs = Artwork.objects.filter(
         collection=collection
-    ).select_related('category', 'theme').prefetch_related('images')
+    ).select_related('category', 'theme').prefetch_related(
+        Prefetch('images', queryset=ArtworkImage.objects.filter(is_primary=True))
+    )
     
     carousel_images = []
-    for artwork in artworks_qs.filter(images__isnull=False)[:10]:
-        if artwork.images.exists():
-            first_image = artwork.images.first()
-            if first_image:
-                carousel_images.append({
-                    'url': first_image.image.url,
-                    'alt': artwork.title,
-                    'artwork_url': artwork.get_absolute_url()
-                })
     
+    artworks_with_images = artworks_qs.filter(
+        images__isnull=False
+    ).distinct()[:10]
+    
+    for artwork in artworks_with_images:
+        primary_image = artwork.images.filter(is_primary=True).first()
+        
+        if primary_image:
+            carousel_images.append({
+                'url': primary_image.image.url,
+                'alt': artwork.title,
+                'artwork_url': artwork.get_absolute_url()
+            })
+
     if not carousel_images and collection.image:
         carousel_images.append({
             'url': collection.image.url,
@@ -218,7 +225,11 @@ def collection_detail(request, slug):
     
     other_collections = Collection.objects.exclude(
         id=collection.id
-    )[:6]
+    ).annotate(
+        artwork_count=Count('artwork')
+    ).filter(
+        Q(image__isnull=False) & ~Q(image='')
+    ).order_by('?')[:6]
     
     context = {
         'collection': collection,
@@ -262,14 +273,13 @@ def home(request):
     small_artwork = random.choice(list(small_artworks)) if small_artworks.exists() else None
     
     # Одна случайная большая картина
-    large_artworks = Artwork.objects.filter(
-        status='available'
-    ).filter(
-        Q(width_cm__gt=40) | Q(height_cm__gt=60)
+    artworks_in_collections = Artwork.objects.filter(
+        status='available',
+        collection__isnull=False  # Только картинки, которые в коллекциях
     )
-    large_artwork = random.choice(list(large_artworks)) if large_artworks.exists() else None
+
+    artwork_in_collection = random.choice(list(artworks_in_collections)) if artworks_in_collections.exists() else None
     
-    # 4 последних поста из блога
     recent_posts = []
     try:
         from blog.models import BlogPost
@@ -277,7 +287,6 @@ def home(request):
             status='published'
         ).order_by('-created_at')[:4]
     except (ImportError, RuntimeError):
-        # Если блог не установлен
         pass
     
     context = {
@@ -285,14 +294,13 @@ def home(request):
         'oil_artwork': oil_artwork,
         'pastel_artwork': pastel_artwork,
         'small_artwork': small_artwork,
-        'large_artwork': large_artwork,
+        'artwork_in_collection': artwork_in_collection,
         'recent_posts': recent_posts,
     }
     return render(request, 'artworks/home.html', context)
 
 def about(request):
     """Страница 'Обо мне'"""
-    # Получаем 12 самых популярных картин (по просмотрам)
     popular_artworks = Artwork.objects.filter(
         status='available'
     ).order_by('-views')[:12]
@@ -305,12 +313,10 @@ def about(request):
 
 def contact(request):
     """Страница 'Контакты'"""
-    # Получаем 12 самых популярных картин
     popular_artworks = Artwork.objects.filter(
         status='available'
     ).order_by('-views')[:12]
     
-    # Получаем 12 популярных постов из блога
     popular_posts = []
     try:
         from blog.models import BlogPost

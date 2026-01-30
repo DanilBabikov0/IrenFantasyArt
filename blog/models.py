@@ -72,9 +72,12 @@ class BlogPost(models.Model):
         verbose_name_plural = "Посты блога"
         ordering = ['-published_at', '-created_at']
         indexes = [
-            models.Index(fields=['status']),
+            models.Index(fields=['status', '-published_at']),
+            models.Index(fields=['status', '-views']),
+            models.Index(fields=['status', '-created_at']),
             models.Index(fields=['author']),
-            models.Index(fields=['created_at']),
+            models.Index(fields=['slug']),
+            models.Index(fields=['tags']),
         ]
     
     def __str__(self):
