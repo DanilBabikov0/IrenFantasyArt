@@ -1,6 +1,9 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import pymysql
+
+pymysql.install_as_MySQLdb()
 
 load_dotenv()
 
@@ -105,14 +108,11 @@ else:
 
                 'CONN_MAX_AGE': 600,
                 'CONN_HEALTH_CHECKS': True,
-                'OPTIONS': {
-                    'options': '-c statement_timeout=30000',
-                },
             }
         }
-        print("PostgreSQL")
+        print("MySQL")
     except Exception as e:
-        print(f"PostgreSQL Error: {e}")
+        print(f"MySQL Error: {e}")
         print("SQLite")
         DATABASES = {
             'default': {
@@ -294,9 +294,6 @@ LOGGING = {
         },
     },
 }
-
-
-
 
 
 # .env

@@ -7,6 +7,7 @@ django-markdownx==4.0.9
 Markdown==3.10.1
 pillow==12.1.0
 psycopg2-binary==2.9.11
+PyMySQL==1.1.2
 python-dotenv==1.2.1
 sqlparse==0.5.5
 whitenoise==6.11.0
