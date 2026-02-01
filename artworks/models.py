@@ -7,6 +7,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from io import BytesIO
 from PIL import Image
 from django.core.files.base import ContentFile
+from unidecode import unidecode
 import os
 
 class Category(models.Model):
@@ -248,7 +249,6 @@ class ArtworkImage(models.Model):
             except ArtworkImage.DoesNotExist:
                 is_new_image = True
         
-        # Сжимаем только новые или изменённые изображения
         if is_new_image and self.image:
             try:
                 img = Image.open(self.image)
@@ -275,9 +275,14 @@ class ArtworkImage(models.Model):
                 img.save(img_io, format='JPEG', quality=85, optimize=True)
                 img_io.seek(0)
                 
-                # Сохраняем файл с новым именем
+                # Транслитерируем имя файла
                 original_name = os.path.basename(self.image.name)
                 name, ext = os.path.splitext(original_name)
+                
+                # Конвертируем кириллицу в латиницу
+                name = unidecode(name)  # Транслитерация
+                name = slugify(name)     # Убираем спецсимволы, делаем нижний регистр
+                
                 new_name = f"{name}_compressed.jpg"
                 
                 self.image.save(
