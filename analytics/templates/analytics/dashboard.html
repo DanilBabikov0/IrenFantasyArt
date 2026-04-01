@@ -1,0 +1,197 @@
+{% extends 'artworks/base.html' %}
+{% load static %}
+
+{% block title %}Аналитика сайта{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Аналитика сайта</h1>
+    
+    <!-- Раздел: Картины -->
+    <h2 class="mb-3">Картины</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Топ-10 самых просматриваемых картин</h5>
+        </div>
+        <div class="card-body">
+            {% if top_artworks %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr><th>#</th><th>Название</th><th>Просмотры</th><th>Размер</th><th>Год</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for artwork in top_artworks %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{{ artwork.get_absolute_url }}">{{ artwork.title }}</a></td>
+                            <td>{{ artwork.views }}</td>
+                            <td>{{ artwork.get_dimensions }}</td>
+                            <td>{{ artwork.created_year }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}<p class="text-muted">Нет данных о просмотрах картин.</p>{% endif %}
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Динамика просмотров картин за последние 30 дней</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="artworkViewsChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Самые популярные тематики (по просмотрам)</h5>
+        </div>
+        <div class="card-body">
+            {% if top_themes %}
+            <canvas id="themesChart" width="400" height="200"></canvas>
+            {% else %}<p class="text-muted">Нет данных по темам.</p>{% endif %}
+        </div>
+    </div>
+
+    <!-- Раздел: Блог -->
+    <h2 class="mb-3 mt-5">Блог</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Топ-10 самых просматриваемых статей</h5>
+        </div>
+        <div class="card-body">
+            {% if top_posts %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead><tr><th>#</th><th>Заголовок</th><th>Просмотры</th><th>Дата публикации</th></tr></thead>
+                    <tbody>
+                        {% for post in top_posts %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></td>
+                            <td>{{ post.views }}</td>
+                            <td>{{ post.published_at|date:"d.m.Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}<p class="text-muted">Нет данных о просмотрах статей.</p>{% endif %}
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Динамика просмотров блога за последние 30 дней</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="blogViewsChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Самые популярные теги (по просмотрам статей)</h5>
+        </div>
+        <div class="card-body">
+            {% if top_tags %}
+            <canvas id="tagsChart" width="400" height="200"></canvas>
+            {% else %}<p class="text-muted">Нет данных по тегам.</p>{% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // График просмотров картин
+    const ctxArtwork = document.getElementById('artworkViewsChart').getContext('2d');
+    new Chart(ctxArtwork, {
+        type: 'line',
+        data: {
+            labels: {{ artwork_chart_labels|safe }},
+            datasets: [{
+                label: 'Просмотры картин',
+                data: {{ artwork_chart_data|safe }},
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                tension: 0.1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true, title: { display: true, text: 'Просмотры' } },
+                      x: { title: { display: true, text: 'Дата' } } }
+        }
+    });
+
+    // Диаграмма популярных тем
+    {% if top_themes %}
+    const ctxThemes = document.getElementById('themesChart').getContext('2d');
+    new Chart(ctxThemes, {
+        type: 'bar',
+        data: {
+            labels: [{% for theme in top_themes %}'{{ theme.name }}', {% endfor %}],
+            datasets: [{
+                label: 'Просмотры',
+                data: [{% for theme in top_themes %}{{ theme.views }}, {% endfor %}],
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+    {% endif %}
+
+    // График просмотров блога
+    const ctxBlog = document.getElementById('blogViewsChart').getContext('2d');
+    new Chart(ctxBlog, {
+        type: 'line',
+        data: {
+            labels: {{ blog_chart_labels|safe }},
+            datasets: [{
+                label: 'Просмотры блога',
+                data: {{ blog_chart_data|safe }},
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true, title: { display: true, text: 'Просмотры' } },
+                      x: { title: { display: true, text: 'Дата' } } }
+        }
+    });
+
+    // Диаграмма популярных тегов
+    {% if top_tags %}
+    const ctxTags = document.getElementById('tagsChart').getContext('2d');
+    new Chart(ctxTags, {
+        type: 'bar',
+        data: {
+            labels: [{% for tag in top_tags %}'{{ tag.name }}', {% endfor %}],
+            datasets: [{
+                label: 'Просмотры статей с этим тегом',
+                data: [{% for tag in top_tags %}{{ tag.views }}, {% endfor %}],
+                backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+    {% endif %}
+</script>
+{% endblock %}

@@ -8,6 +8,15 @@ from django.contrib.sitemaps.views import sitemap
 from artworks.sitemaps import ArtworkSitemap, CollectionSitemap, StaticViewSitemap
 from blog.sitemaps import BlogPostSitemap, BlogStaticSitemap
 from django.views.generic import TemplateView
+from django.views.generic.base import RedirectView
+
+old_redirects = {
+    '/shop/': '/catalog/',
+    '/product-category/pastel/': '/catalog/',
+    '/spring-road-pastel/': '/blog/',
+    '/product/': '/catalog/',
+    # добавьте остальные по необходимости
+}
 
 sitemaps = {
     'artworks': ArtworkSitemap,
@@ -20,6 +29,7 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
+    path('analytics/', include('analytics.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('', include('artworks.urls')),
 
@@ -39,3 +49,6 @@ urlpatterns += [
         'document_root': settings.MEDIA_ROOT,
     }),
 ]
+
+for old_url, new_url in old_redirects.items():
+    urlpatterns.append(path(old_url.lstrip('/'), RedirectView.as_view(url=new_url, permanent=True)))

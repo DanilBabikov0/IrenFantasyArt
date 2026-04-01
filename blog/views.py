@@ -7,6 +7,8 @@ from .models import BlogPost
 from collections import Counter
 import re
 
+from analytics.models import BlogPostView
+
 def blog_list(request):
     """Список постов блога"""
     
@@ -109,6 +111,7 @@ def blog_detail(request, slug):
         from django.db.models import F
         BlogPost.objects.filter(id=post.id).update(views=F('views') + 1)
         post.views += 1  # Обновляем локально для отображения
+        BlogPostView.objects.create(post=post)
         viewed_posts.append(post.id)
         if len(viewed_posts) > 50:
             viewed_posts = viewed_posts[-50:]

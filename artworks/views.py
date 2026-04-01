@@ -6,6 +6,7 @@ from .models import Artwork, Category, Theme, Collection, ArtworkImage
 from .filters import ArtworkFilter
 import random
 
+from analytics.models import ArtworkView
 
 def catalog(request):
     """Каталог с фильтрами, поиском и пагинацией"""
@@ -113,6 +114,7 @@ def artwork_detail(request, slug):
     
     if artwork.id not in viewed_artworks:
         artwork.increment_views()
+        ArtworkView.objects.create(artwork=artwork)
         viewed_artworks.append(artwork.id)
         if len(viewed_artworks) > 50:
             viewed_artworks = viewed_artworks[-50:]
@@ -253,7 +255,7 @@ def home(request):
     # Одна случайная картина маслом (ID категории 1)
     oil_artworks = Artwork.objects.filter(
         status='available',
-        category_id=1
+        category_id=4
     )
     oil_artwork = random.choice(list(oil_artworks)) if oil_artworks.exists() else None
     

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     'artworks',
     'blog',
+    'analytics',
 ]
 
 MIDDLEWARE = [

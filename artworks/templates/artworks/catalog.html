@@ -364,7 +364,7 @@
                         {% if artworks.has_previous %}
                         <li class="page-item">
                             <a class="page-link" 
-                               href="?{% for key, value in request.GET.lists %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ artworks.previous_page_number }}">
+                            href="?{% for key, values in request.GET.lists %}{% if key != 'page' %}{% for val in values %}{{ key }}={{ val|urlencode }}&{% endfor %}{% endif %}{% endfor %}page={{ artworks.previous_page_number }}">
                                 <i class="bi bi-chevron-left"></i>
                             </a>
                         </li>
@@ -378,7 +378,7 @@
                             {% elif num > artworks.number|add:'-3' and num < artworks.number|add:'3' %}
                             <li class="page-item">
                                 <a class="page-link" 
-                                   href="?{% for key, value in request.GET.lists %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                                href="?{% for key, values in request.GET.lists %}{% if key != 'page' %}{% for val in values %}{{ key }}={{ val|urlencode }}&{% endfor %}{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
                             </li>
                             {% endif %}
                         {% endfor %}
@@ -386,7 +386,7 @@
                         {% if artworks.has_next %}
                         <li class="page-item">
                             <a class="page-link" 
-                               href="?{% for key, value in request.GET.lists %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ artworks.next_page_number }}">
+                            href="?{% for key, values in request.GET.lists %}{% if key != 'page' %}{% for val in values %}{{ key }}={{ val|urlencode }}&{% endfor %}{% endif %}{% endfor %}page={{ artworks.next_page_number }}">
                                 <i class="bi bi-chevron-right"></i>
                             </a>
                         </li>

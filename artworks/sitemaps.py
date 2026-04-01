@@ -6,7 +6,7 @@ from .models import Artwork, Collection
 class ArtworkSitemap(Sitemap):
     changefreq = 'weekly'
     priority = 0.9
-    protocol = 'http' # ← http для локальной разработки
+    #protocol = 'https' # ← http для локальной разработки
 
     def items(self):
         return Artwork.objects.filter(status='available')
