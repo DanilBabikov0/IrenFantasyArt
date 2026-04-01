@@ -44,6 +44,7 @@ IrenFantasyArt/
 Скопируйте .env.example в .env и заполните необходимые значения
 
 В .env укажите SECRET_KEY, режим отладки (DEBUG) и другие параметры.
+
 5. **Применить миграции**
    ```bash
    python manage.py migrate
